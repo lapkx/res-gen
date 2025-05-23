@@ -1,5 +1,3 @@
-import fetch from 'node-fetch';
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -29,26 +27,28 @@ Experience: ${experience}
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         model: 'meta-llama/Llama-3.3-70B-Instruct-Turbo-Free',
-        prompt: prompt,
+        prompt,
         max_tokens: 512,
         temperature: 0.7,
         top_p: 0.9,
-        stop: ["\n\n", "---"]
-      })
+        stop: ['\n\n', '---'],
+      }),
     });
 
     const data = await response.json();
 
     if (response.ok && data.output) {
-      res.status(200).json({ result: data.output.choices[0].text.trim() });
+      res.status(200).json({ result: data.output.trim() });
     } else {
+      console.error('API error details:', data);
       res.status(500).json({ error: 'AI API error' });
     }
   } catch (error) {
+    console.error('Catch error:', error);
     res.status(500).json({ error: error.message });
   }
 }
