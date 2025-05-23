@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Resume Generator</title>
+</head>
+<body>
+  <h1>Resume Generator</h1>
+  <form id="resumeForm">
+    <label for="skills">Skills:</label><br />
+    <textarea id="skills" name="skills" rows="4" cols="50"></textarea><br />
+    <label for="experience">Experience:</label><br />
+    <textarea id="experience" name="experience" rows="4" cols="50"></textarea><br />
+    <button type="submit">Generate Resume Points</button>
+  </form>
+  <pre id="output"></pre>
+
+  <script>
+    const form = document.getElementById('resumeForm');
+    const output = document.getElementById('output');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const skills = document.getElementById('skills').value;
+      const experience = document.getElementById('experience').value;
+
+      output.textContent = 'Loading...';
+
+      try {
+        const response = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ skills, experience })
+        });
+
+        const data = await response.json();
+        if (data.error) {
+          output.textContent = 'Error: ' + data.error;
+        } else {
+          output.textContent = data.result;
+        }
+      } catch (err) {
+        output.textContent = 'Fetch error: ' + err.message;
+      }
+    });
+  </script>
+</body>
+</html>
