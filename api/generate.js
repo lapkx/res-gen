@@ -42,7 +42,7 @@ Experience: ${experience}
     const data = await response.json();
 
     if (response.ok && data.output) {
-      res.status(200).json({ result: data.output.trim() });
+      res.status(200).json({ result: data.output.choices[0].text.trim() });
     } else {
       console.error('API error details:', data);
       res.status(500).json({ error: 'AI API error' });
