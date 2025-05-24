@@ -3,21 +3,115 @@
 <head>
   <meta charset="UTF-8">
   <title>Resume Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --bg: #0a0f0d;
+      --accent: #08fdd8;
+      --text: #ffffff;
+      --gray: #999999;
+      --card: #1c1f20;
+      --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      background: var(--card);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    }
+
+    h1 {
+      color: var(--accent);
+      font-size: 1.8rem;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      resize: vertical;
+      min-height: 80px;
+      background-color: #2a2f31;
+      color: var(--text);
+      font-size: 1rem;
+      font-family: inherit;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 1rem;
+      margin-top: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:disabled {
+      background-color: #3c3c3c;
+      cursor: not-allowed;
+    }
+
+    #loading {
+      text-align: center;
+      color: var(--gray);
+      margin-top: 10px;
+    }
+
+    pre {
+      background: #101314;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+  </style>
 </head>
 <body>
-  <form id="resume-form">
-    <label>
-      Skills:
+  <div class="container">
+    <h1>AI Resume Bullet Generator</h1>
+    <form id="resume-form">
+      <label for="skills">Skills:</label>
       <textarea name="skills" id="skills" required></textarea>
-    </label><br>
-    <label>
-      Experience:
+
+      <label for="experience">Experience:</label>
       <textarea name="experience" id="experience" required></textarea>
-    </label><br>
-    <button type="submit" id="submit-btn">Generate Resume Points</button>
-    <p id="loading" style="display: none;">Generating...</p>
-  </form>
-  <pre id="result"></pre>
+
+      <button type="submit" id="submit-btn">Generate Resume Points</button>
+      <p id="loading" style="display: none;">⏳ Generating, please wait...</p>
+    </form>
+    <pre id="result"></pre>
+  </div>
 
   <script>
     const form = document.getElementById('resume-form');
@@ -28,13 +122,12 @@
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      // Disable button and show loading
       button.disabled = true;
       loading.style.display = 'block';
       result.textContent = '';
 
-      const skills = document.getElementById('skills').value;
-      const experience = document.getElementById('experience').value;
+      const skills = document.getElementById('skills').value.trim();
+      const experience = document.getElementById('experience').value.trim();
 
       try {
         const response = await fetch('/api/generate', {
@@ -47,15 +140,18 @@
         if (response.ok) {
           result.textContent = data.result;
         } else {
-          result.textContent = 'Error: ' + (data.error || 'Something went wrong.');
+          result.textContent = '❌ Error: ' + (data.error || 'Something went wrong.');
         }
       } catch (err) {
-        result.textContent = 'Error: ' + err.message;
+        result.textContent = '❌ Error: ' + err.message;
       }
 
-      // Re-enable button and hide loading
-      button.disabled = false;
       loading.style.display = 'none';
+
+      // Enforce 5 second wait before re-enabling the button
+      setTimeout(() => {
+        button.disabled = false;
+      }, 5000);
     });
   </script>
 </body>
