@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Genius - Create & Match</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .resume-paper {
+            background: linear-gradient(to bottom, #f9f9f9, #ffffff);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            border-top: 8px solid #3b82f6;
+        }
+        .progress-step.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .section-divider {
+            border-top: 2px dashed #e5e7eb;
+        }
+        .skill-level {
+            height: 6px;
+            border-radius: 3px;
+            background-color: #e5e7eb;
+        }
+        .skill-level-fill {
+            height: 100%;
+            border-radius: 3px;
+            background-color: #3b82f6;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-bold text-blue-600 mb-2">Resume Genius</h1>
+            <p class="text-gray-600">Create a professional resume in minutes, then find jobs that match your profile</p>
+        </header>
+
+        <!-- Progress Steps -->
+        <div class="flex justify-center mb-12">
+            <div class="flex items-center">
+                <div class="progress-step active flex items-center justify-center w-10 h-10 rounded-full border-2 border-blue-500 text-blue-500 font-bold">
+                    1
+                </div>
+                <div class="w-16 h-1 bg-blue-500 mx-2"></div>
+                <div class="progress-step flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-300 text-gray-400 font-bold">
+                    2
+                </div>
+                <div class="w-16 h-1 bg-gray-300 mx-2"></div>
+                <div class="progress-step flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-300 text-gray-400 font-bold">
+                    3
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Form Section -->
+            <div class="w-full lg:w-1/2 bg-white rounded-xl shadow-md p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Your Information</h2>
+                
+                <form id="resumeForm" class="space-y-6">
+                    <!-- Personal Info -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+                            <i class="fas fa-user-circle mr-2 text-blue-500"></i> Personal Details
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                                <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="John Doe" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                <input type="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="john@example.com" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                                <input type="tel" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="(123) 456-7890">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                                <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="City, Country">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Professional Summary -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+                            <i class="fas fa-file-alt mr-2 text-blue-500"></i> Professional Summary
+                        </h3>
+                        <textarea class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" rows="4" placeholder="Experienced professional with 5+ years in..."></textarea>
+                    </div>
+
+                    <!-- Work Experience -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+                            <i class="fas fa-briefcase mr-2 text-blue-500"></i> Work Experience
+                        </h3>
+                        <div id="experienceContainer">
+                            <div class="experience-entry mb-4 p-4 border border-gray-200 rounded-lg">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Job Title</label>
+                                        <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Software Engineer">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Company</label>
+                                        <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Tech Corp Inc.">
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                                        <input type="month" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+                                        <input type="month" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Responsibilities</label>
+                                    <textarea class="w-full px-4 py-2 border border-gray-300 rounded-lg" rows="3" placeholder="Describe your responsibilities and achievements"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" id="addExperience" class="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center">
+                            <i class="fas fa-plus-circle mr-1"></i> Add Another Position
+                        </button>
+                    </div>
+
+                    <!-- Education -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+                            <i class="fas fa-graduation-cap mr-2 text-blue-500"></i> Education
+                        </h3>
+                        <div id="educationContainer">
+                            <div class="education-entry mb-4 p-4 border border-gray-200 rounded-lg">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Degree</label>
+                                        <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Bachelor of Science">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Field of Study</label>
+                                        <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Computer Science">
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Institution</label>
+                                        <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="University of Technology">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Graduation Year</label>
+                                        <input type="number" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="2020">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" id="addEducation" class="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center">
+                            <i class="fas fa-plus-circle mr-1"></i> Add Another Education
+                        </button>
+                    </div>
+
+                    <!-- Skills -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+                            <i class="fas fa-tools mr-2 text-blue-500"></i> Skills
+                        </h3>
+                        <div id="skillsContainer">
+                            <div class="skill-entry mb-4">
+                                <div class="flex items-center mb-1">
+                                    <input type="text" class="flex-grow px-4 py-2 border border-gray-300 rounded-lg mr-2" placeholder="Skill (e.g., JavaScript)">
+                                    <select class="px-4 py-2 border border-gray-300 rounded-lg">
+                                        <option value="1">Beginner</option>
+                                        <option value="2">Intermediate</option>
+                                        <option value="3">Advanced</option>
+                                        <option value="4">Expert</option>
+                                    </select>
+                                </div>
+                                <div class="skill-level">
+                                    <div class="skill-level-fill" style="width: 75%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" id="addSkill" class="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center">
+                            <i class="fas fa-plus-circle mr-1"></i> Add Another Skill
+                        </button>
+                    </div>
+
+                    <div class="pt-4">
+                        <button type="button" id="generateResume" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200">
+                            Generate Professional Resume
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Preview Section (Initially Hidden) -->
+            <div id="previewSection" class="w-full lg:w-1/2 hidden">
+                <div class="sticky top-4">
+                    <div class="bg-white resume-paper rounded-xl p-8 mb-6">
+                        <!-- Resume Header -->
+                        <div class="text-center mb-8">
+                            <h1 id="previewName" class="text-3xl font-bold text-gray-800">John Doe</h1>
+                            <div class="flex justify-center space-x-4 text-gray-600 mt-2">
+                                <span id="previewPhone">(123) 456-7890</span>
+                                <span>•</span>
+                                <span id="previewEmail">john@example.com</span>
+                                <span>•</span>
+                                <span id="previewLocation">New York, USA</span>
+                            </div>
+                        </div>
+
+                        <!-- Professional Summary -->
+                        <div class="mb-6">
+                            <h2 class="text-xl font-bold text-gray-800 border-b border-gray-300 pb-1 mb-3">Professional Summary</h2>
+                            <p id="previewSummary" class="text-gray-700">Experienced professional with 5+ years in software development, specializing in web applications and team leadership. Proven track record of delivering high-quality solutions on time and within budget.</p>
+                        </div>
+
+                        <!-- Work Experience -->
+                        <div class="mb-6">
+                            <h2 class="text-xl font-bold text-gray-800 border-b border-gray-300 pb-1 mb-3">Work Experience</h2>
+                            <div id="previewExperience">
+                                <div class="mb-4">
+                                    <div class="flex justify-between items-start mb-1">
+                                        <h3 class="font-bold text-gray-800">Senior Software Engineer</h3>
+                                        <span class="text-gray-600">Jan 2018 - Present</span>
+                                    </div>
+                                    <div class="flex justify-between text-gray-700 mb-2">
+                                        <span>Tech Solutions Inc.</span>
+                                        <span>New York, NY</span>
+                                    </div>
+                                    <ul class="list-disc pl-5 text-gray-700 space-y-1">
+                                        <li>Led a team of 5 developers to deliver a customer portal that increased client retention by 30%</li>
+                                        <li>Implemented CI/CD pipeline reducing deployment time by 60%</li>
+                                        <li>Mentored junior developers and conducted code reviews</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Education -->
+                        <div class="mb-6">
+                            <h2 class="text-xl font-bold text-gray-800 border-b border-gray-300 pb-1 mb-3">Education</h2>
+                            <div id="previewEducation">
+                                <div class="mb-2">
+                                    <div class="flex justify-between">
+                                        <h3 class="font-bold text-gray-800">Bachelor of Science in Computer Science</h3>
+                                        <span class="text-gray-600">2014 - 2018</span>
+                                    </div>
+                                    <p class="text-gray-700">University of Technology, New York</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Skills -->
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-800 border-b border-gray-300 pb-1 mb-3">Skills</h2>
+                            <div id="previewSkills" class="flex flex-wrap gap-2">
+                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">JavaScript</span>
+                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">React</span>
+                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Node.js</span>
+                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Git</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button id="downloadResume" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg mr-4 transition duration-200">
+                            <i class="fas fa-download mr-2"></i> Download PDF
+                        </button>
+                        <button id="findJobs" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg transition duration-200">
+                            <i class="fas fa-search mr-2"></i> Find Matching Jobs
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Job Matching Section (Initially Hidden) -->
+            <div id="jobMatchingSection" class="w-full hidden">
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                        <i class="fas fa-bullseye mr-2 text-green-500"></i> Jobs Matching Your Profile
+                    </h2>
+                    <p class="text-gray-600 mb-6">Based on your resume, we've found these positions that align with your skills and experience.</p>
+                    
+                    <div class="space-y-6" id="jobListings">
+                        <!-- Job cards will be inserted here by JavaScript -->
+                    </div>
+
+                    <div class="mt-8 text-center">
+                        <button id="backToResume" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition duration-200">
+                            <i class="fas fa-arrow-left mr-2"></i> Back to Resume
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Form elements
+            const resumeForm = document.getElementById('resumeForm');
+            const generateResumeBtn = document.getElementById('generateResume');
+            const previewSection = document.getElementById('previewSection');
+            const jobMatchingSection = document.getElementById('jobMatchingSection');
+            const findJobsBtn = document.getElementById('findJobs');
+            const backToResumeBtn = document.getElementById('backToResume');
+            const downloadResumeBtn = document.getElementById('downloadResume');
+            
+            // Experience management
+            const experienceContainer = document.getElementById('experienceContainer');
+            const addExperienceBtn = document.getElementById('addExperience');
+            
+            // Education management
+            const educationContainer = document.getElementById('educationContainer');
+            const addEducationBtn = document.getElementById('addEducation');
+            
+            // Skills management
+            const skillsContainer = document.getElementById('skillsContainer');
+            const addSkillBtn = document.getElementById('addSkill');
+            
+            // Preview elements
+            const previewName = document.getElementById('previewName');
+            const previewPhone = document.getElementById('previewPhone');
+            const previewEmail = document.getElementById('previewEmail');
+            const previewLocation = document.getElementById('previewLocation');
+            const previewSummary = document.getElementById('previewSummary');
+            const previewExperience = document.getElementById('previewExperience');
+            const previewEducation = document.getElementById('previewEducation');
+            const previewSkills = document.getElementById('previewSkills');
+            
+            // Job listings container
+            const jobListings = document.getElementById('jobListings');
+            
+            // Add experience entry
+            addExperienceBtn.addEventListener('click', function() {
+                const newEntry = document.createElement('div');
+                newEntry.className = 'experience-entry mb-4 p-4 border border-gray-200 rounded-lg';
+                newEntry.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Job Title</label>
+                            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Software Engineer">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Company</label>
+                            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Tech Corp Inc.">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                            <input type="month" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+                            <input type="month" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Responsibilities</label>
+                        <textarea class="w-full px-4 py-2 border border-gray-300 rounded-lg" rows="3" placeholder="Describe your responsibilities and achievements"></textarea>
+                    </div>
+                    <button type="button" class="remove-experience mt-2 text-red-600 hover:text-red-800 text-sm font-medium flex items-center">
+                        <i class="fas fa-minus-circle mr-1"></i> Remove Position
+                    </button>
+                `;
+                experienceContainer.appendChild(newEntry);
+                
+                // Add event listener to the remove button
+                newEntry.querySelector('.remove-experience').addEventListener('click', function() {
+                    experienceContainer.removeChild(newEntry);
+                });
+            });
+            
+            // Add education entry
+            addEducationBtn.addEventListener('click', function() {
+                const newEntry = document.createElement('div');
+                newEntry.className = 'education-entry mb-4 p-4 border border-gray-200 rounded-lg';
+                newEntry.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Degree</label>
+                            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Bachelor of Science">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Field of Study</label>
+                            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Computer Science">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Institution</label>
+                            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="University of Technology">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Graduation Year</label>
+                            <input type="number" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="2020">
+                        </div>
+                    </div>
+                    <button type="button" class="remove-education mt-2 text-red-600 hover:text-red-800 text-sm font-medium flex items-center">
+                        <i class="fas fa-minus-circle mr-1"></i> Remove Education
+                    </button>
+                `;
+                educationContainer.appendChild(newEntry);
+                
+                // Add event listener to the remove button
+                newEntry.querySelector('.remove-education').addEventListener('click', function() {
+                    educationContainer.removeChild(newEntry);
+                });
+            });
+            
+            // Add skill entry
+            addSkillBtn.addEventListener('click', function() {
+                const newEntry = document.createElement('div');
+                newEntry.className = 'skill-entry mb-4';
+                newEntry.innerHTML = `
+                    <div class="flex items-center mb-1">
+                        <input type="text" class="flex-grow px-4 py-2 border border-gray-300 rounded-lg mr-2" placeholder="Skill (e.g., JavaScript)">
+                        <select class="px-4 py-2 border border-gray-300 rounded-lg">
+                            <option value="1">Beginner</option>
+                            <option value="2">Intermediate</option>
+                            <option value="3">Advanced</option>
+                            <option value="4">Expert</option>
+                        </select>
+                    </div>
+                    <div class="skill-level">
+                        <div class="skill-level-fill" style="width: 75%;"></div>
+                    </div>
+                    <button type="button" class="remove-skill mt-1 text-red-600 hover:text-red-800 text-sm font-medium flex items-center">
+                        <i class="fas fa-minus-circle mr-1"></i> Remove Skill
+                    </button>
+                `;
+                skillsContainer.appendChild(newEntry);
+                
+                // Add event listener to the remove button
+                newEntry.querySelector('.remove-skill').addEventListener('click', function() {
+                    skillsContainer.removeChild(newEntry);
+                });
+                
+                // Add event listener to the skill level select
+                const skillSelect = newEntry.querySelector('select');
+                const skillLevelFill = newEntry.querySelector('.skill-level-fill');
+                
+                skillSelect.addEventListener('change', function() {
+                    const level = parseInt(this.value);
+                    let width = '25%';
+                    if (level === 2) width = '50%';
+                    else if (level === 3) width = '75%';
+                    else if (level === 4) width = '100%';
+                    skillLevelFill.style.width = width;
+                });
+            });
+            
+            // Generate resume
+            generateResumeBtn.addEventListener('click', function() {
+                // Get form values
+                const formData = new FormData(resumeForm);
+                const name = document.querySelector('input[type="text"]').value || 'John Doe';
+                const email = document.querySelector('input[type="email"]').value || 'john@example.com';
+                const phone = document.querySelector('input[type="tel"]').value || '(123) 456-7890';
+                const location = document.querySelectorAll('input[type="text"]')[3].value || 'New York, USA';
+                const summary = document.querySelector('textarea').value || 'Experienced professional with 5+ years in software development, specializing in web applications and team leadership.';
+                
+                // Update preview
+                previewName.textContent = name;
+                previewPhone.textContent = phone;
+                previewEmail.textContent = email;
+                previewLocation.textContent = location;
+                previewSummary.textContent = summary;
+                
+                // Update experience preview
+                previewExperience.innerHTML = '';
+                const experienceEntries = document.querySelectorAll('.experience-entry');
+                experienceEntries.forEach(entry => {
+                    const title = entry.querySelector('input[type="text"]').value || 'Software Engineer';
+                    const company = entry.querySelectorAll('input[type="text"]')[1].value || 'Tech Corp Inc.';
+                    const startDate = entry.querySelector('input[type="month"]').value || 'Jan 2018';
+                    const endDate = entry.querySelectorAll('input[type="month"]')[1].value || 'Present';
+                    const responsibilities = entry.querySelector('textarea').value || 
+                        'Led a team of developers\nImplemented new features\nCollaborated with cross-functional teams';
+                    
+                    const expDiv = document.createElement('div');
+                    expDiv.className = 'mb-4';
+                    expDiv.innerHTML = `
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="font-bold text-gray-800">${title}</h3>
+                            <span class="text-gray-600">${formatDate(startDate)} - ${formatDate(endDate)}</span>
+                        </div>
+                        <div class="flex justify-between text-gray-700 mb-2">
+                            <span>${company}</span>
+                            <span>${location.split(',')[0] || 'New York'}, ${location.split(',')[1] || 'NY'}</span>
+                        </div>
+                        <ul class="list-disc pl-5 text-gray-700 space-y-1">
+                            ${responsibilities.split('\n').map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    `;
+                    previewExperience.appendChild(expDiv);
+                });
+                
+                // Update education preview
+                previewEducation.innerHTML = '';
+                const educationEntries = document.querySelectorAll('.education-entry');
+                educationEntries.forEach(entry => {
+                    const degree = entry.querySelector('input[type="text"]').value || 'Bachelor of Science';
+                    const field = entry.querySelectorAll('input[type="text"]')[1].value || 'Computer Science';
+                    const institution = entry.querySelectorAll('input[type="text"]')[2].value || 'University of Technology';
+                    const year = entry.querySelector('input[type="number"]').value || '2020';
+                    
+                    const eduDiv = document.createElement('div');
+                    eduDiv.className = 'mb-2';
+                    eduDiv.innerHTML = `
+                        <div class="flex justify-between">
+                            <h3 class="font-bold text-gray-800">${degree} in ${field}</h3>
+                            <span class="text-gray-600">${year}</span>
+                        </div>
+                        <p class="text-gray-700">${institution}, ${location.split(',')[0] || 'New York'}</p>
+                    `;
+                    previewEducation.appendChild(eduDiv);
+                });
+                
+                // Update skills preview
+                previewSkills.innerHTML = '';
+                const skillEntries = document.querySelectorAll('.skill-entry');
+                skillEntries.forEach(entry => {
+                    const skill = entry.querySelector('input[type="text"]').value || 'JavaScript';
+                    if (skill.trim() !== '') {
+                        const skillSpan = document.createElement('span');
+                        skillSpan.className = 'bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm';
+                        skillSpan.textContent = skill;
+                        previewSkills.appendChild(skillSpan);
+                    }
+                });
+                
+                // Show preview and update progress steps
+                document.querySelector('.flex.justify-center.mb-12').innerHTML = `
+                    <div class="flex items-center">
+                        <div class="progress-step flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-300 text-gray-400 font-bold">
+                            1
+                        </div>
+                        <div class="w-16 h-1 bg-gray-300 mx-2"></div>
+                        <div class="progress-step active flex items-center justify-center w-10 h-10 rounded-full border-2 border-blue-500 text-blue-500 font-bold">
+                            2
+                        </div>
+                        <div class="w-16 h-1 bg-gray-300 mx-2"></div>
+                        <div class="progress-step flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-300 text-gray-400 font-bold">
+                            3
+                        </div>
+                    </div>
+                `;
+                
+                document.querySelector('.w-full.lg\\:w-1\\/2.bg-white').classList.add('hidden');
+                previewSection.classList.remove('hidden');
+            });
+            
+            // Find jobs button
+            findJobsBtn.addEventListener('click', function() {
+                // Generate mock job listings based on skills and experience
+                const skills = [];
+                document.querySelectorAll('.skill-entry input[type="text"]').forEach(input => {
+                    if (input.value.trim() !== '') {
+                        skills.push(input.value.trim());
+                    }
+                });
+                
+                // Default skills if none provided
+                if (skills.length === 0) {
+                    skills.push('JavaScript', 'React', 'Node.js', 'Git');
+                }
+                
+                // Generate job listings
+                jobListings.innerHTML = '';
+                
+                // Job 1
+                const job1 = generateJobCard(
+                    'Senior ' + (skills[0] || 'Software') + ' Engineer',
+                    'Tech Innovations Inc.',
+                    'San Francisco, CA (Remote possible)',
+                    '$120,000 - $150,000',
+                    'We are looking for an experienced ' + (skills[0] || 'Software') + ' Engineer to join our growing team. You will be responsible for developing and maintaining our core products.',
+                    ['5+ years experience with ' + (skills[0] || 'programming'), 'Strong knowledge of ' + (skills[1] || 'modern frameworks'), 'Experience with ' + (skills[2] || 'backend technologies')],
+                    95
+                );
+                jobListings.appendChild(job1);
+                
+                // Job 2
+                const job2 = generateJobCard(
+                    (skills[1] || 'Frontend') + ' Developer',
+                    'Digital Solutions LLC',
+                    'New York, NY (Hybrid)',
+                    '$90,000 - $110,000',
+                    'Join our frontend team to build beautiful, responsive user interfaces for our enterprise clients.',
+                    ['3+ years experience with ' + (skills[1] || 'frontend development'), 'Proficiency in ' + (skills[0] || 'JavaScript'), 'Familiarity with ' + (skills[3] || 'version control')],
+                    88
+                );
+                jobListings.appendChild(job2);
+                
+                // Job 3
+                const job3 = generateJobCard(
+                    'Full Stack ' + (skills[0] || 'Developer'),
+                    'StartUp Ventures',
+                    'Remote',
+                    '$80,000 - $100,000',
+                    'Early-stage startup looking for a versatile developer to wear many hats and help build our product from the ground up.',
+                    ['2+ years full stack experience', 'Knowledge of both ' + (skills[1] || 'frontend') + ' and ' + (skills[2] || 'backend'), 'Self-starter attitude'],
+                    82
+                );
+                jobListings.appendChild(job3);
+                
+                // Job 4
+                const job4 = generateJobCard(
+                    (skills[3] || 'DevOps') + ' Engineer',
+                    'Cloud Systems Corp',
+                    'Austin, TX',
+                    '$110,000 - $130,000',
+                    'Help us build and maintain our cloud infrastructure and CI/CD pipelines.',
+                    ['Experience with cloud platforms (AWS, Azure)', 'Knowledge of containerization and orchestration', 'Strong ' + (skills[3] || 'automation') + ' skills'],
+                    78
+                );
+                jobListings.appendChild(job4);
+                
+                // Job 5
+                const job5 = generateJobCard(
+                    'Lead ' + (skills[0] || 'Software') + ' Developer',
+                    'Enterprise Solutions Ltd',
+                    'Chicago, IL',
+                    '$140,000 - $160,000',
+                    'Lead a team of developers building mission-critical applications for Fortune 500 clients.',
+                    ['8+ years software development experience', '3+ years in a leadership role', 'Expertise in ' + (skills[0] || 'core technologies')],
+                    92
+                );
+                jobListings.appendChild(job5);
+                
+                // Update progress steps
+                document.querySelector('.flex.justify-center.mb-12').innerHTML = `
+                    <div class="flex items-center">
+                        <div class="progress-step flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-300 text-gray-400 font-bold">
+                            1
+                        </div>
+                        <div class="w-16 h-1 bg-gray-300 mx-2"></div>
+                        <div class="progress-step flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-300 text-gray-400 font-bold">
+                            2
+                        </div>
+                        <div class="w-16 h-1 bg-gray-300 mx-2"></div>
+                        <div class="progress-step active flex items-center justify-center w-10 h-10 rounded-full border-2 border-blue-500 text-blue-500 font-bold">
+                            3
+                        </div>
+                    </div>
+                `;
+                
+                previewSection.classList.add('hidden');
+                jobMatchingSection.classList.remove('hidden');
+            });
+            
+            // Back to resume button
+            backToResumeBtn.addEventListener('click', function() {
+                jobMatchingSection.classList.add('hidden');
+                previewSection.classList.remove('hidden');
+                
+                // Update progress steps
+                document.querySelector('.flex.justify-center.mb-12').innerHTML = `
+                    <div class="flex items-center">
+                        <div class="progress-step flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-300 text-gray-400 font-bold">
+                            1
+                        </div>
+                        <div class="w-16 h-1 bg-gray-300 mx-2"></div>
+                        <div class="progress-step active flex items-center justify-center w-10 h-10 rounded-full border-2 border-blue-500 text-blue-500 font-bold">
+                            2
+                        </div>
+                        <div class="w-16 h-1 bg-gray-300 mx-2"></div>
+                        <div class="progress-step flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-300 text-gray-400 font-bold">
+                            3
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Download resume button
+            downloadResumeBtn.addEventListener('click', function() {
+                alert('Resume downloaded! (This is a demo - in a real app, this would generate a PDF)');
+            });
+            
+            // Helper function to format date
+            function formatDate(dateString) {
+                if (!dateString) return 'Present';
+                const date = new Date(dateString);
+                if (isNaN(date.getTime())) return 'Present';
+                return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+            }
+            
+            // Helper function to generate job cards
+            function generateJobCard(title, company, location, salary, description, requirements, matchScore) {
+                const card = document.createElement('div');
+                card.className = 'job-card bg-white rounded-lg border border-gray-200 p-6 transition duration-200 hover:shadow-lg';
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-bold text-gray-800">${title}</h3>
+                        <div class="flex items-center">
+                            <span class="text-sm font-medium ${getMatchColor(matchScore)} px-2 py-1 rounded-full">
+                                ${matchScore}% Match
+                            </span>
+                        </div>
+                    </div>
+                    <div class="text-gray-700 mb-3">
+                        <span class="font-medium">${company}</span> • ${location}
+                    </div>
+                    <div class="flex items-center text-gray-700 mb-4">
+                        <i class="fas fa-dollar-sign mr-1 text-green-500"></i>
+                        <span>${salary}</span>
+                    </div>
+                    <p class="text-gray-600 mb-4">${description}</p>
+                    <div class="mb-4">
+                        <h4 class="font-medium text-gray-800 mb-2">Requirements:</h4>
+                        <ul class="list-disc pl-5 text-gray-700 space-y-1">
+                            ${requirements.map(req => `<li>${req}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-500">Posted 2 days ago</span>
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200">
+                            Apply Now
+                        </button>
+                    </div>
+                `;
+                return card;
+            }
+            
+            // Helper function to get match color
+            function getMatchColor(score) {
+                if (score >= 90) return 'bg-green-100 text-green-800';
+                if (score >= 80) return 'bg-blue-100 text-blue-800';
+                if (score >= 70) return 'bg-yellow-100 text-yellow-800';
+                return 'bg-red-100 text-red-800';
+            }
+        });
+
+        // Collect all form data into a single object
+  function collectFormData() {
+    const form = document.getElementById('resumeForm');
+    const nameField    = form.querySelector('input[placeholder="John Doe"]');
+    const emailField   = form.querySelector('input[type="email"]');
+    const phoneField   = form.querySelector('input[type="tel"]');
+    const locationField= form.querySelector('input[placeholder="City, Country"]');
+    const summaryField = form.querySelector('textarea[placeholder^="Experienced"]');
+
+    const experiences = Array.from(form.querySelectorAll('.experience-entry')).map(entry => ({
+      title:            entry.querySelector('input[placeholder="Software Engineer"]').value.trim() || 'Software Engineer',
+      company:          entry.querySelector('input[placeholder="Tech Corp Inc."]').value.trim() || '',
+      start:            entry.querySelector('input[type="month"]').value || '',
+      end:              entry.querySelectorAll('input[type="month"]')[1].value || 'Present',
+      location:         locationField.value.split(',')[0].trim(),
+      responsibilities: entry.querySelector('textarea').value.split('\n').map(l=>l.trim()).filter(l=>l)
+    }));
+
+    const education = Array.from(form.querySelectorAll('.education-entry')).map(entry => ({
+      degree:      entry.querySelector('input[placeholder="Bachelor of Science"]').value.trim() || '',
+      field:       entry.querySelector('input[placeholder="Computer Science"]').value.trim() || '',
+      institution: entry.querySelector('input[placeholder="University of Technology"]').value.trim() || '',
+      year:        entry.querySelector('input[placeholder="2020"]').value || ''
+    }));
+
+    const skills = Array.from(form.querySelectorAll('.skill-entry input')).map(input => input.value.trim()).filter(s=>s);
+
+    return {
+      name:        nameField.value.trim()    || 'John Doe',
+      email:       emailField.value.trim()   || 'john@example.com',
+      phone:       phoneField.value.trim()   || '(123) 456-7890',
+      location:    locationField.value.trim()|| 'New York, USA',
+      summary:     summaryField.value.trim() || '',
+      experiences,
+      education,
+      skills
+    };
+  }
+
+  generateResumeBtn.addEventListener('click', async () => {
+    generateResumeBtn.disabled = true;
+    generateResumeBtn.textContent = 'Polishing…';
+
+    const data = collectFormData();
+
+    try {
+      const resp = await fetch('/api/polishResume', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const { polished } = await resp.json();
+      // Inject polished text
+      previewSection.innerHTML = `
+        <div class="bg-white resume-paper rounded-xl p-8">
+          <pre class="whitespace-pre-wrap text-gray-800">${polished}</pre>
+        </div>
+      `;
+      // Advance to step 3 in your UI
+      document.querySelector('.flex.justify-center.mb-12').innerHTML = `
+        <div class="flex items-center">
+          <div class="progress-step flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-300 text-gray-400 font-bold">1</div>
+          <div class="w-16 h-1 bg-gray-300 mx-2"></div>
+          <div class="progress-step flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-300 text-gray-400 font-bold">2</div>
+          <div class="w-16 h-1 bg-gray-300 mx-2"></div>
+          <div class="progress-step active flex items-center justify-center w-10 h-10 rounded-full border-2 border-blue-500 text-blue-500 font-bold">3</div>
+        </div>
+      `;
+      previewSection.classList.remove('hidden');
+      document.querySelector('.w-full.lg\\:w-1\\/2.bg-white').classList.add('hidden');
+    } catch (err) {
+      alert('Failed to generate resume: ' + err.error || err.message);
+    } finally {
+      generateResumeBtn.disabled = false;
+      generateResumeBtn.textContent = 'Generate Professional Resume';
+    }
+  });
+
+    </script>
+</body>
+</html>
