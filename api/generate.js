@@ -16,10 +16,27 @@ export default async function handler(req, res) {
 
   const prompt = `
 You are a resume assistant. Only use the information I give you — do not invent or assume anything.
-Generate 5 professional resume bullet points using the following skills and experience. Do not include any introductions or explanations—just the bullet points.
+Based only on the following skills and experience, generate 5 professional resume bullet points. 
+Each bullet point should begin with a strong action verb and be results-oriented. 
+Use concise, professional language suitable for a resume.
+Do not include any headings or explanations — only the bullet points.
 
+EXAMPLE:
+Skills: Leadership, Carpentry, Project Management
+Experience: Led a 10-person team in remodeling a commercial property; Managed budget and materials for a 3-story apartment renovation
+
+Output:
+- Led a 10-person team through a full-scale commercial property remodel, completing the project under budget and ahead of schedule.
+- Managed procurement and budgeting for a 3-story apartment renovation, ensuring timely delivery of all materials.
+- Oversaw on-site construction and carpentry work, ensuring code compliance and safety.
+- Implemented efficient workflows for subcontractor teams, improving overall productivity.
+- Communicated directly with clients to align project goals and resolve design challenges.
+
+NOW YOU:
 Skills: ${skills}
 Experience: ${experience}
+
+Output:
 `;
 
   try {
