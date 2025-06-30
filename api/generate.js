@@ -1,12 +1,24 @@
+// pages/api/generate.js
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { skills, experience } = req.body;
+  // destructure everything your single HTML form will send
+  const {
+    name,
+    email,
+    phone,
+    location,
+    summary,
+    experiences, // expect an array of { title, company, start, end, location, responsibilities }
+    education,   // expect an array of { degree, field, institution, year }
+    skills       // expect an array of strings
+  } = req.body;
 
-  if (!skills || !experience) {
-    return res.status(400).json({ error: 'Missing skills or experience' });
+  // basic validation
+  if (!name || !summary || !Array.isArray(experiences) || experiences.length === 0) {
+    return res.status(400).json({ error: 'Missing required resume data' });
   }
 
   const apiKey = process.env.TOGETHER_API_KEY;
@@ -14,58 +26,73 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'API key not set' });
   }
 
+  // build a single prompt
   const prompt = `
-You are a resume assistant. Only use the information I give you — do not invent or assume anything.
-Based only on the following skills and experience, generate 5 professional resume bullet points. 
-Each bullet point should begin with a strong action verb and be results-oriented. 
-Use concise, professional language suitable for a resume.
-Do not include any headings or explanations — only the bullet points.
+You are a world‐class resume writer. Using only the information below, output a clean, ATS‐friendly resume with these sections:
+• Header (Name, Email, Phone, Location)
+• Professional Summary (2–3 sentences)
+• Work Experience (for each job: Title, Company, Dates, Location, 3–5 bullet points with strong action verbs & quantifiable results)
+• Education (Degree in Field, Institution, Year)
+• Skills (comma‐separated)
 
-EXAMPLE:
-Skills: Leadership, Carpentry, Project Management
-Experience: Led a 10-person team in remodeling a commercial property; Managed budget and materials for a 3-story apartment renovation
+PERSONAL INFO:
+Name: ${name}
+Email: ${email}
+Phone: ${phone}
+Location: ${location}
 
-Output:
-- Led a 10-person team through a full-scale commercial property remodel, completing the project under budget and ahead of schedule.
-- Managed procurement and budgeting for a 3-story apartment renovation, ensuring timely delivery of all materials.
-- Oversaw on-site construction and carpentry work, ensuring code compliance and safety.
-- Implemented efficient workflows for subcontractor teams, improving overall productivity.
-- Communicated directly with clients to align project goals and resolve design challenges.
+SUMMARY:
+${summary}
 
-NOW YOU:
-Skills: ${skills}
-Experience: ${experience}
+EXPERIENCES:
+${experiences
+  .map(
+    (e, i) => `
+${i + 1}. Title: ${e.title}
+   Company: ${e.company}
+   Dates: ${e.start} – ${e.end}
+   Location: ${e.location}
+   Responsibilities:
+   - ${e.responsibilities.join('\n   - ')}`
+  )
+  .join('')}
 
-Output:
+EDUCATION:
+${education.map(ed => `- ${ed.degree} in ${ed.field}, ${ed.institution} (${ed.year})`).join('\n')}
+
+SKILLS:
+${skills.join(', ')}
+
+Output only the resume text — no explanations.
 `;
 
   try {
-    const response = await fetch('https://api.together.xyz/inference', {
+    const aiRes = await fetch('https://api.together.xyz/inference', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         model: 'meta-llama/Llama-3.3-70B-Instruct-Turbo-Free',
         prompt,
-        max_tokens: 512,
+        max_tokens: 1500,
         temperature: 0.7,
-        top_p: 0.9,
-        stop: ['\n\n', '---'],
-      }),
+        top_p: 0.9
+      })
     });
 
-    const data = await response.json();
-
-    if (response.ok && data.output?.choices?.[0]?.text) {
-      res.status(200).json({ result: data.output.choices[0].text.trim() });
-    } else {
-      console.error('API error details:', data);
-      res.status(500).json({ error: 'AI API error' });
+    const json = await aiRes.json();
+    if (!aiRes.ok || !json.output?.choices?.[0]?.text) {
+      console.error('AI error details:', json);
+      return res.status(500).json({ error: 'AI API error' });
     }
-  } catch (error) {
-    console.error('Catch error:', error);
-    res.status(500).json({ error: error.message });
+
+    // send back as `result` so your front end can stay the same
+    const polished = json.output.choices[0].text.trim();
+    res.status(200).json({ result: polished });
+  } catch (err) {
+    console.error('Fetch error:', err);
+    res.status(500).json({ error: err.message || 'Server error' });
   }
 }
