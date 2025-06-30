@@ -1,133 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Resume Generator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Resume Bullet Point Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            tropical: {
+              dark: '#0f172a',
+              primary: '#06b6d4',
+              secondary: '#22d3ee',
+              accent: '#67e8f9',
+              text: '#f8fafc',
+              light: '#e2e8f0'
+            }
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    :root {
-      --bg: #ffffff;
-      --accent: #08fdd8;
-      --text: #ffffff;
-      --gray: #999999;
-      --card: #1c1f20;
-      --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    .gradient-text {
+      background: linear-gradient(to right, #06b6d4, #22d3ee);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font);
-      margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
-
-    .container {
-      max-width: 600px;
-      background: var(--card);
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-    }
-
-    h1 {
-      color: var(--accent);
-      font-size: 1.8rem;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 12px;
-      font-weight: 500;
-    }
-
-    textarea {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      resize: vertical;
-      min-height: 80px;
-      background-color: #2a2f31;
-      color: var(--text);
-      font-size: 1rem;
-      font-family: inherit;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      background-color: var(--accent);
-      color: #000;
-      border: none;
-      border-radius: 8px;
+    .bullet-points li::before {
+      content: "•";
+      color: #06b6d4;
       font-weight: bold;
-      cursor: pointer;
-      font-size: 1rem;
-      margin-top: 16px;
-      transition: background-color 0.3s ease;
+      display: inline-block;
+      width: 1em;
+      margin-left: -1em;
     }
-
-    button:disabled {
-      background-color: #3c3c3c;
-      cursor: not-allowed;
+    .fade-in {
+      animation: fadeIn 0.4s ease-in-out;
     }
-
-    #loading {
-      text-align: center;
-      color: var(--gray);
-      margin-top: 10px;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-
-    pre {
-      background: #101314;
-      padding: 20px;
-      border-radius: 10px;
-      margin-top: 20px;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-      font-size: 0.95rem;
-      line-height: 1.5;
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
     }
   </style>
 </head>
-<body>
-  <div class="container">
-    <h1>AI Resume Bullet Generator</h1>
-    <form id="resume-form">
-      <label for="skills">Skills:</label>
-      <textarea name="skills" id="skills" required></textarea>
+<body class="bg-tropical-dark text-tropical-text min-h-screen">
+  <div class="container mx-auto px-4 py-12 max-w-4xl">
+    <header class="text-center mb-12">
+      <h1 class="text-4xl font-bold gradient-text mb-3">
+        <i class="fas fa-brain mr-3"></i> AI Resume Generator
+      </h1>
+      <p class="text-tropical-light text-lg">Turn your skills and experience into polished resume bullet points.</p>
+    </header>
 
-      <label for="experience">Experience:</label>
-      <textarea name="experience" id="experience" required></textarea>
+    <div class="bg-tropical-dark rounded-xl shadow-2xl border border-tropical-primary/20">
+      <div class="p-6 md:p-8">
+        <form id="resumeForm" class="space-y-6">
+          <div>
+            <label for="skills" class="block text-sm font-medium text-tropical-light mb-2">
+              <i class="fas fa-code mr-2"></i> Skills (comma separated)
+            </label>
+            <textarea id="skills" rows="3" class="w-full px-4 py-3 bg-tropical-dark border border-tropical-primary/30 rounded-lg text-tropical-text" placeholder="e.g. JavaScript, React, Leadership" required></textarea>
+          </div>
+          <div>
+            <label for="experience" class="block text-sm font-medium text-tropical-light mb-2">
+              <i class="fas fa-briefcase mr-2"></i> Experience
+            </label>
+            <textarea id="experience" rows="3" class="w-full px-4 py-3 bg-tropical-dark border border-tropical-primary/30 rounded-lg text-tropical-text" placeholder="e.g. Software engineer at Google for 3 years" required></textarea>
+          </div>
 
-      <button type="submit" id="submit-btn">Generate Resume Points</button>
-      <p id="loading" style="display: none;">⏳ Generating, please wait...</p>
-    </form>
-    <pre id="result"></pre>
+          <div class="flex items-center justify-between">
+            <div class="text-sm text-tropical-light/70">
+              <i class="fas fa-info-circle mr-1"></i> AI will generate 5 bullet points
+            </div>
+            <button type="submit" id="generateBtn" class="px-6 py-3 bg-gradient-to-r from-tropical-primary to-tropical-secondary rounded-lg font-medium text-tropical-dark hover:opacity-90 transition-all duration-300 flex items-center pulse">
+              <i class="fas fa-magic mr-2"></i> Generate
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="border-t border-tropical-primary/20"></div>
+
+      <div class="p-6 md:p-8">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-xl font-semibold text-tropical-light">
+            <i class="fas fa-list-ul mr-2"></i> Generated Bullet Points
+          </h3>
+          <div id="timer" class="hidden text-sm bg-tropical-primary/10 px-3 py-1 rounded-full text-tropical-primary font-medium">
+            <i class="fas fa-clock mr-1"></i> <span id="countdown">5</span>s cooldown
+          </div>
+        </div>
+
+        <div id="loading" class="hidden text-center py-8">
+          <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-tropical-primary mb-4"></div>
+          <p class="text-tropical-light">Generating bullet points...</p>
+        </div>
+
+        <div id="results" class="hidden space-y-4">
+          <ul id="bulletPoints" class="bullet-points space-y-3 text-tropical-light pl-5"></ul>
+          <div class="pt-4">
+            <button id="copyBtn" class="px-4 py-2 bg-tropical-primary/10 text-tropical-primary rounded-lg font-medium hover:bg-tropical-primary/20 transition-all duration-300">
+              <i class="fas fa-copy mr-2"></i> Copy to Clipboard
+            </button>
+          </div>
+        </div>
+
+        <div id="error" class="hidden p-4 bg-red-500/10 text-red-300 rounded-lg">
+          <i class="fas fa-exclamation-triangle mr-2"></i>
+          <span id="errorMessage">Something went wrong</span>
+        </div>
+
+        <div id="placeholder" class="text-center py-8 text-tropical-light/50 border-2 border-dashed border-tropical-primary/20 rounded-lg">
+          <i class="fas fa-lightbulb text-4xl mb-3"></i>
+          <p>Your AI-generated bullet points will appear here</p>
+        </div>
+      </div>
+    </div>
+
+    <footer class="mt-12 text-center text-tropical-light/50 text-sm">
+      <p>Powered by Together.ai | ResumeGen © 2025</p>
+    </footer>
   </div>
 
   <script>
-    const form = document.getElementById('resume-form');
-    const result = document.getElementById('result');
-    const button = document.getElementById('submit-btn');
+    const form = document.getElementById('resumeForm');
+    const generateBtn = document.getElementById('generateBtn');
     const loading = document.getElementById('loading');
+    const results = document.getElementById('results');
+    const error = document.getElementById('error');
+    const placeholder = document.getElementById('placeholder');
+    const bulletPoints = document.getElementById('bulletPoints');
+    const copyBtn = document.getElementById('copyBtn');
+    const timer = document.getElementById('timer');
+    const countdown = document.getElementById('countdown');
 
-    form.addEventListener('submit', async (e) => {
+    let cooldownActive = false;
+
+    form.addEventListener('submit', async function(e) {
       e.preventDefault();
-
-      button.disabled = true;
-      loading.style.display = 'block';
-      result.textContent = '';
+      if (cooldownActive) return;
 
       const skills = document.getElementById('skills').value.trim();
       const experience = document.getElementById('experience').value.trim();
+
+      if (!skills || !experience) {
+        showError("Please enter both skills and experience.");
+        return;
+      }
+
+      loading.classList.remove('hidden');
+      results.classList.add('hidden');
+      error.classList.add('hidden');
+      placeholder.classList.add('hidden');
+      generateBtn.disabled = true;
 
       try {
         const response = await fetch('/api/generate', {
@@ -137,21 +174,62 @@
         });
 
         const data = await response.json();
-        if (response.ok) {
-          result.textContent = data.result;
-        } else {
-          result.textContent = '❌ Error: ' + (data.error || 'Something went wrong.');
+
+        if (!response.ok || !data.result) {
+          throw new Error(data.error || "AI error");
         }
+
+        const lines = data.result.trim().split('\n').filter(line => line.trim());
+        bulletPoints.innerHTML = '';
+        lines.forEach(line => {
+          const li = document.createElement('li');
+          li.textContent = line.replace(/^[-•]\s*/, '');
+          li.classList.add('fade-in');
+          bulletPoints.appendChild(li);
+        });
+
+        loading.classList.add('hidden');
+        results.classList.remove('hidden');
+        startCooldown();
+
       } catch (err) {
-        result.textContent = '❌ Error: ' + err.message;
+        showError(err.message || "Something went wrong");
       }
+    });
 
-      loading.style.display = 'none';
+    function showError(msg) {
+      document.getElementById('errorMessage').textContent = msg;
+      error.classList.remove('hidden');
+      loading.classList.add('hidden');
+      placeholder.classList.add('hidden');
+      generateBtn.disabled = false;
+    }
 
-      // Enforce 5 second wait before re-enabling the button
-      setTimeout(() => {
-        button.disabled = false;
-      }, 5000);
+    function startCooldown() {
+      cooldownActive = true;
+      generateBtn.disabled = true;
+      timer.classList.remove('hidden');
+      let seconds = 5;
+      countdown.textContent = seconds;
+      const interval = setInterval(() => {
+        seconds--;
+        countdown.textContent = seconds;
+        if (seconds <= 0) {
+          clearInterval(interval);
+          timer.classList.add('hidden');
+          generateBtn.disabled = false;
+          cooldownActive = false;
+        }
+      }, 1000);
+    }
+
+    copyBtn.addEventListener('click', () => {
+      const text = Array.from(bulletPoints.children).map(li => `• ${li.textContent}`).join('\n');
+      navigator.clipboard.writeText(text).then(() => {
+        const original = copyBtn.innerHTML;
+        copyBtn.innerHTML = '<i class="fas fa-check mr-2"></i> Copied!';
+        setTimeout(() => copyBtn.innerHTML = original, 2000);
+      });
     });
   </script>
 </body>
