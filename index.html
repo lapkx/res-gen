@@ -147,8 +147,16 @@
       <!-- Resume Preview -->
       <div id="previewSection" class="w-full lg:w-1/2 hidden">
         <div id="aiResult" class="bg-white resume-paper rounded-xl p-8 whitespace-pre-wrap text-gray-800"></div>
-      </div>
+            <!-- Step 2: Job Matching -->
+    <div id="jobMatchSection" class="mt-6 hidden">
+      <button id="findJobsBtn"
+        class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg mb-4">
+        Find Matching Jobs
+      </button>
+      <div id="jobResults" class="space-y-4"></div>
     </div>
+
+      </div>
 
     <!-- Step 2: Job Matching Results -->
     <div id="jobMatchSection" class="w-full lg:w-3/4 mx-auto hidden mt-8">
