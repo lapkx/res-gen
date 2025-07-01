@@ -1,25 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Resume Genius - Create & Match</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <style>
-    .resume-paper {
-      background: linear-gradient(to bottom, #f9f9f9, #ffffff);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-      border-top: 8px solid #3b82f6;
-    }
-    .progress-step.active {
-      background-color: #3b82f6;
-      color: white;
-    }
-    .job-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    }
+    .resume-paper { background: linear-gradient(to bottom, #f9f9f9, #ffffff); box-shadow: 0 4px 30px rgba(0,0,0,0.1); border-top: 8px solid #3b82f6; }
+    .progress-step.active { background-color: #3b82f6; color: white; }
+    .job-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
     .skill-level { height: 6px; border-radius: 3px; background-color: #e5e7eb; }
     .skill-level-fill { height: 100%; border-radius: 3px; background-color: #3b82f6; }
   </style>
@@ -124,8 +114,7 @@
                 <div class="flex items-center mb-1">
                   <input type="text" placeholder="Skill (e.g., JavaScript)" class="flex-grow px-4 py-2 border rounded-lg mr-2" />
                   <select class="px-4 py-2 border rounded-lg">
-                    <option>Beginner</option><option>Intermediate</option>
-                    <option>Advanced</option><option>Expert</option>
+                    <option>Beginner</option><option>Intermediate</option><option>Advanced</option><option>Expert</option>
                   </select>
                 </div>
                 <div class="skill-level"><div class="skill-level-fill" style="width:75%"></div></div>
@@ -147,7 +136,6 @@
       <!-- Resume Preview & Job Match Step 2 -->
       <div id="previewSection" class="w-full lg:w-1/2 hidden">
         <div id="aiResult" class="bg-white resume-paper rounded-xl p-8 whitespace-pre-wrap text-gray-800"></div>
-        <!-- Step 2: Job Matching -->
         <div id="jobMatchSection" class="mt-6 hidden">
           <button id="findJobsBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg mb-4">
             Find Matching Jobs
@@ -159,15 +147,15 @@
   </div>
 
   <script>
-    // (Re-use your existing dynamic field handlers here…)
+    // Dynamic add/remove handlers (leave your existing code here)
 
-    const resumeForm       = document.getElementById('resumeForm');
-    const previewSection   = document.getElementById('previewSection');
-    const aiResult         = document.getElementById('aiResult');
-    const generateBtn      = document.getElementById('generateResume');
-    const jobMatchSection  = document.getElementById('jobMatchSection');
-    const findJobsBtn      = document.getElementById('findJobsBtn');
-    const jobResults       = document.getElementById('jobResults');
+    const resumeForm      = document.getElementById('resumeForm');
+    const generateBtn     = document.getElementById('generateResume');
+    const previewSection  = document.getElementById('previewSection');
+    const aiResult        = document.getElementById('aiResult');
+    const jobMatchSection = document.getElementById('jobMatchSection');
+    const findJobsBtn     = document.getElementById('findJobsBtn');
+    const jobResults      = document.getElementById('jobResults');
 
     function collectFormData() {
       const [name, email, phone, location] = Array.from(
@@ -199,26 +187,26 @@
 
     // Step 1: Generate Resume
     generateBtn.addEventListener('click', async () => {
-      generateBtn.disabled = true;
+      generateBtn.disabled    = true;
       generateBtn.textContent = 'Polishing…';
-      aiResult.innerHTML = '';
+      aiResult.innerHTML      = '';
       jobMatchSection.classList.add('hidden');
-      jobResults.innerHTML = '';
+      jobResults.innerHTML    = '';
 
       try {
         const payload = collectFormData();
-        const res = await fetch('/api/generate', {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
-          body: JSON.stringify(payload)
+        const res     = await fetch('/api/generate', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify(payload)
         });
         const { result } = await res.json();
 
-        // Split reasoning/final
-        let reasoning = '', finalOutput = result;
-        const marker = 'However', idx = result.lastIndexOf(marker);
+        // Split reasoning vs final
+        let reasoning   = '', finalOutput = result;
+        const marker    = 'However', idx = result.lastIndexOf(marker);
         if (idx !== -1) {
-          reasoning = result.slice(0, idx).trim();
+          reasoning   = result.slice(0,idx).trim();
           finalOutput = result.slice(idx).trim();
         }
 
@@ -239,22 +227,22 @@
         console.error(err);
         alert('Error: ' + (err.message||'Failed to generate resume'));
       } finally {
-        generateBtn.disabled = false;
+        generateBtn.disabled    = false;
         generateBtn.textContent = 'Generate Professional Resume';
       }
     });
 
     // Step 2: Find Matching Jobs
     findJobsBtn.addEventListener('click', async () => {
-      findJobsBtn.disabled = true;
+      findJobsBtn.disabled    = true;
       findJobsBtn.textContent = 'Searching…';
-      jobResults.innerHTML = '';
+      jobResults.innerHTML    = '';
 
       try {
         const { skills, location } = collectFormData();
         const res = await fetch('/api/adzuna', {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
           body: JSON.stringify({ skills, location })
         });
         const { jobs } = await res.json();
@@ -277,10 +265,10 @@
           });
         }
       } catch(err) {
-        console.error(err);
-        jobResults.innerHTML = `<p class="text-red-500">Error fetching jobs.</p>`;
+        console.error('Adzuna error:', err);
+        jobResults.innerHTML = `<p class="text-red-500">Error fetching jobs: ${err.message||err}</p>`;
       } finally {
-        findJobsBtn.disabled = false;
+        findJobsBtn.disabled    = false;
         findJobsBtn.textContent = 'Find Matching Jobs';
       }
     });
