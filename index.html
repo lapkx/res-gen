@@ -38,8 +38,103 @@
       <div class="w-full lg:w-1/2 bg-white rounded-xl shadow-md p-6">
         <h2 class="text-2xl font-bold text-gray-800 mb-6">Your Information</h2>
         <form id="resumeForm" class="space-y-6">
-          <!-- [YOUR EXISTING FORM FIELDS GO HERE: Personal, Summary, Experience, Education, Skills] -->
-          <!-- ... -->
+          <!-- Personal Info -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+              <i class="fas fa-user-circle mr-2 text-blue-500"></i> Personal Details
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input type="text" placeholder="John Doe" required class="w-full px-4 py-2 border rounded-lg" />
+              <input type="email" placeholder="john@example.com" required class="w-full px-4 py-2 border rounded-lg" />
+              <input type="tel" placeholder="(123) 456-7890" class="w-full px-4 py-2 border rounded-lg" />
+              <input type="text" placeholder="City, Country" class="w-full px-4 py-2 border rounded-lg" />
+            </div>
+          </div>
+
+          <!-- Professional Summary -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+              <i class="fas fa-file-alt mr-2 text-blue-500"></i> Professional Summary
+            </h3>
+            <textarea placeholder="Experienced professional with 5+ years in..." rows="4" class="w-full px-4 py-2 border rounded-lg"></textarea>
+          </div>
+
+          <!-- Work Experience -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+              <i class="fas fa-briefcase mr-2 text-blue-500"></i> Work Experience
+            </h3>
+            <div id="experienceContainer">
+              <div class="experience-entry mb-4 p-4 border rounded-lg">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                  <input type="text" placeholder="Software Engineer" class="w-full px-4 py-2 border rounded-lg" />
+                  <input type="text" placeholder="Tech Corp Inc." class="w-full px-4 py-2 border rounded-lg" />
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                  <input type="month" class="w-full px-4 py-2 border rounded-lg" />
+                  <input type="month" class="w-full px-4 py-2 border rounded-lg" />
+                </div>
+                <textarea rows="3" placeholder="Describe your responsibilities and achievements" class="w-full px-4 py-2 border rounded-lg"></textarea>
+                <button type="button" class="remove-experience mt-2 text-red-600 hover:text-red-800 flex items-center">
+                  <i class="fas fa-minus-circle mr-1"></i> Remove Position
+                </button>
+              </div>
+            </div>
+            <button type="button" id="addExperience" class="text-blue-600 flex items-center">
+              <i class="fas fa-plus-circle mr-1"></i> Add Another Position
+            </button>
+          </div>
+
+          <!-- Education -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+              <i class="fas fa-graduation-cap mr-2 text-blue-500"></i> Education
+            </h3>
+            <div id="educationContainer">
+              <div class="education-entry mb-4 p-4 border rounded-lg">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                  <input type="text" placeholder="Bachelor of Science" class="w-full px-4 py-2 border rounded-lg" />
+                  <input type="text" placeholder="Computer Science" class="w-full px-4 py-2 border rounded-lg" />
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                  <input type="text" placeholder="University of Technology" class="w-full px-4 py-2 border rounded-lg" />
+                  <input type="number" placeholder="2020" class="w-full px-4 py-2 border rounded-lg" />
+                </div>
+                <button type="button" class="remove-education mt-2 text-red-600 hover:text-red-800 flex items-center">
+                  <i class="fas fa-minus-circle mr-1"></i> Remove Education
+                </button>
+              </div>
+            </div>
+            <button type="button" id="addEducation" class="text-blue-600 flex items-center">
+              <i class="fas fa-plus-circle mr-1"></i> Add Another Education
+            </button>
+          </div>
+
+          <!-- Skills -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+              <i class="fas fa-tools mr-2 text-blue-500"></i> Skills
+            </h3>
+            <div id="skillsContainer">
+              <div class="skill-entry mb-4">
+                <div class="flex items-center mb-1">
+                  <input type="text" placeholder="Skill (e.g., JavaScript)" class="flex-grow px-4 py-2 border rounded-lg mr-2" />
+                  <select class="px-4 py-2 border rounded-lg">
+                    <option>Beginner</option><option>Intermediate</option><option>Advanced</option><option>Expert</option>
+                  </select>
+                </div>
+                <div class="skill-level"><div class="skill-level-fill" style="width:75%"></div></div>
+                <button type="button" class="remove-skill mt-1 text-red-600 hover:text-red-800 flex items-center">
+                  <i class="fas fa-minus-circle mr-1"></i> Remove Skill
+                </button>
+              </div>
+            </div>
+            <button type="button" id="addSkill" class="text-blue-600 flex items-center">
+              <i class="fas fa-plus-circle mr-1"></i> Add Another Skill
+            </button>
+          </div>
+
+          <!-- Generate -->
           <div class="pt-4">
             <button id="generateResume" type="button" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg">
               Generate Professional Resume
@@ -48,7 +143,7 @@
         </form>
       </div>
 
-      <!-- Preview & Filters (STEP 2) -->
+      <!-- Preview & Filters (STEP 2 & 3) -->
       <div id="previewSection" class="w-full lg:w-1/2 hidden space-y-6">
         <!-- AI Resume Output -->
         <div id="aiResult" class="bg-white resume-paper rounded-xl p-8 whitespace-pre-wrap text-gray-800"></div>
@@ -80,7 +175,7 @@
           </div>
         </div>
 
-        <!-- Job Results (STEP 3) -->
+        <!-- Job Results -->
         <div id="jobResultsSection" class="hidden">
           <h3 class="text-2xl font-bold mb-4">Matching Jobs</h3>
           <div id="jobResults" class="space-y-4"></div>
@@ -90,16 +185,19 @@
   </div>
 
   <script>
-    // Collect form data
+    // Add/remove handlers (reuse your existing code)...
+
     function collectFormData() {
       const form = document.getElementById('resumeForm');
       const [name, email, phone, location] = Array.from(form.querySelectorAll('input[placeholder]')).slice(0,4).map(i=>i.value.trim());
       const summary = form.querySelector('textarea').value.trim();
-      // ...collect experiences, education, skills as before...
-      return { name, email, phone, location, summary, experiences: [], education: [], skills: [] };
+      const experiences = []; /* your existing logic */
+      const education = [];   /* your existing logic */
+      const skills = [];      /* your existing logic */
+      return { name, email, phone, location, summary, experiences, education, skills };
     }
 
-    // Step 1: Generate Resume
+    // STEP 1: Generate Resume
     document.getElementById('generateResume').onclick = async () => {
       const btn = document.getElementById('generateResume');
       btn.disabled = true; btn.textContent = 'Polishing…';
@@ -108,20 +206,24 @@
 
       try {
         const payload = collectFormData();
-        const res = await fetch('/api/generate', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+        const res = await fetch('/api/generate', {
+          method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
+        });
         const { result } = await res.json();
-        // split reasoning/final as before...
-        document.getElementById('aiResult').innerHTML = `<details class="mb-4"><summary class="cursor-pointer font-medium text-blue-600">Show AI Full Output</summary><pre class="whitespace-pre-wrap mt-2 bg-gray-100 p-4 rounded">${result}</pre></details>`;
+        document.getElementById('aiResult').innerHTML = `<pre class="whitespace-pre-wrap">${result}</pre>`;
+
         document.getElementById('previewSection').classList.remove('hidden');
         document.getElementById('step1').classList.remove('active');
         document.getElementById('step2').classList.add('active');
         document.getElementById('filterSection').classList.remove('hidden');
+      } catch(e) {
+        console.error(e);
       } finally {
         btn.disabled = false; btn.textContent = 'Generate Professional Resume';
       }
     };
 
-    // Step 2: Apply Filters & Search
+    // STEP 2: Apply Filters & Search
     document.getElementById('applyFiltersBtn').onclick = async () => {
       const btn = document.getElementById('applyFiltersBtn');
       btn.disabled = true; btn.textContent = 'Filtering…';
@@ -136,7 +238,9 @@
       try {
         const { skills, location } = collectFormData();
         const body = { skills, location: loc||location, filters:{ keywords, types } };
-        const res = await fetch('/api/adzuna', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+        const res = await fetch('/api/adzuna', {
+          method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)
+        });
         const { jobs } = await res.json();
         const container = document.getElementById('jobResults');
         container.innerHTML = '';
@@ -158,7 +262,7 @@
         document.getElementById('step2').classList.remove('active');
         document.getElementById('step3').classList.add('active');
         document.getElementById('jobResultsSection').classList.remove('hidden');
-      } catch (e) {
+      } catch(e) {
         console.error(e);
       } finally {
         btn.disabled = false; btn.textContent = 'Apply Filters & Search';
