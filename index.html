@@ -260,6 +260,61 @@
         generateBtn.textContent='Generate Professional Resume';
       }
     });
+
+    // --- Step 2: Fetch and display jobs from Adzuna ---
+const findJobsBtn = document.getElementById('findJobsBtn');
+const jobMatchSection = document.getElementById('jobMatchSection');
+const jobResults = document.getElementById('jobResults');
+
+findJobsBtn.addEventListener('click', async () => {
+  findJobsBtn.disabled = true;
+  findJobsBtn.textContent = 'Searching…';
+  jobResults.innerHTML = '';
+
+  // Pull skills + location from your collectFormData()
+  const { skills, location } = collectFormData();
+
+  try {
+    const res = await fetch('/api/adzuna', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ skills, location })
+    });
+    const { jobs } = await res.json();
+
+    if (!jobs.length) {
+      jobResults.innerHTML = `<p class="text-gray-600">No matching jobs found.</p>`;
+    } else {
+      jobs.forEach(job => {
+        const card = document.createElement('div');
+        card.className = 'p-4 border rounded-lg hover:shadow-lg transition';
+        card.innerHTML = `
+          <h3 class="text-xl font-bold">${job.title}</h3>
+          <p class="text-gray-600">${job.company} • ${job.location}</p>
+          <p class="mt-2 text-gray-700">${job.description.slice(0, 150)}…</p>
+          <a href="${job.url}" target="_blank"
+            class="inline-block mt-3 text-blue-600 hover:underline">
+            View & Apply
+          </a>
+        `;
+        jobResults.appendChild(card);
+      });
+    }
+  } catch (err) {
+    jobResults.innerHTML = `<p class="text-red-500">Error fetching jobs.</p>`;
+    console.error(err);
+  } finally {
+    findJobsBtn.disabled = false;
+    findJobsBtn.textContent = 'Find Matching Jobs';
+  }
+});
+
+// Show the job‑match section once the resume is visible:
+generateBtn.addEventListener('click', () => {
+  // after your existing logic calls previewSection.classList.remove('hidden'):
+  jobMatchSection.classList.remove('hidden');
+});
+
   </script>
 </body>
 </html>
