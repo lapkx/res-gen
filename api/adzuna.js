@@ -1,46 +1,44 @@
-generateBtn.addEventListener('click', async () => {
-  generateBtn.disabled = true;
-  generateBtn.textContent = 'Polishing…';
-  const payload = collectFormData();
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Only POST allowed' });
+  }
 
   try {
-    const res = await fetch('/api/generate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    const { result } = await res.json();
+    const { skills, location } = req.body;
 
-    // Split off “reasoning” before the last “However”
-    let reasoning   = '';
-    let finalOutput = result;
-    const marker    = 'However';
-    const idx       = result.lastIndexOf(marker);
-    if (idx !== -1) {
-      reasoning   = result.slice(0, idx).trim();
-      finalOutput = result.slice(idx).trim();
+    // Fallback if env vars not working
+    const app_id = process.env.ADZUNA_APP_ID || '56654c85';
+    const app_key = process.env.ADZUNA_APP_KEY || '6786a8555c697f27a4fa696843a00991';
+
+    if (!app_id || !app_key) {
+      return res.status(500).json({ error: 'Missing Adzuna credentials' });
     }
 
-    aiResult.innerHTML = `
-      <details class="mb-4">
-        <summary class="cursor-pointer font-medium text-blue-600">
-          Show AI Full Output / Reasoning
-        </summary>
-        <pre class="whitespace-pre-wrap mt-2 bg-gray-100 p-4 rounded">
-${reasoning || result}
-        </pre>
-      </details>
-      <h2 class="text-2xl font-bold mb-2">Final Resume</h2>
-      <pre class="whitespace-pre-wrap bg-white p-4 rounded resume-paper">
-${finalOutput}
-      </pre>
-    `;
+    const query = encodeURIComponent((skills || []).join(' ') || 'developer');
+    const where = encodeURIComponent(location || 'remote');
 
-    previewSection.classList.remove('hidden');
+    const url = `https://api.adzuna.com/v1/api/jobs/us/search/1?app_id=${app_id}&app_key=${app_key}&results_per_page=5&what=${query}&where=${where}&content-type=application/json`;
+
+    const response = await fetch(url);
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Adzuna API error: ${response.status} - ${errorText}`);
+    }
+
+    const data = await response.json();
+
+    const jobs = (data.results || []).map(job => ({
+      title: job.title,
+      company: job.company?.display_name || 'Unknown',
+      location: job.location?.display_name || 'N/A',
+      description: job.description || '',
+      url: job.redirect_url || '#'
+    }));
+
+    return res.status(200).json({ jobs });
+
   } catch (err) {
-    alert('Error: ' + (err.message || 'Failed to generate resume'));
-  } finally {
-    generateBtn.disabled = false;
-    generateBtn.textContent = 'Generate Professional Resume';
+    console.error('Adzuna fetch failed:', err);
+    return res.status(500).json({ error: 'Failed to fetch jobs from Adzuna' });
   }
-});
+}
