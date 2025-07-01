@@ -35,11 +35,11 @@
     <!-- Progress Steps -->
     <div class="flex justify-center mb-12">
       <div class="flex items-center">
-        <div class="progress-step active flex items-center justify-center w-10 h-10 rounded-full border-2 border-blue-500 text-blue-500 font-bold">1</div>
+        <div class="progress-step active w-10 h-10 rounded-full border-2 border-blue-500 text-blue-500 font-bold flex items-center justify-center">1</div>
         <div class="w-16 h-1 bg-blue-500 mx-2"></div>
-        <div class="progress-step flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-300 text-gray-400 font-bold">2</div>
+        <div class="progress-step w-10 h-10 rounded-full border-2 border-gray-300 text-gray-400 font-bold flex items-center justify-center">2</div>
         <div class="w-16 h-1 bg-gray-300 mx-2"></div>
-        <div class="progress-step flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-300 text-gray-400 font-bold">3</div>
+        <div class="progress-step w-10 h-10 rounded-full border-2 border-gray-300 text-gray-400 font-bold flex items-center justify-center">3</div>
       </div>
     </div>
 
@@ -144,48 +144,42 @@
         </form>
       </div>
 
-      <!-- Resume Preview -->
+      <!-- Resume Preview & Job Match Step 2 -->
       <div id="previewSection" class="w-full lg:w-1/2 hidden">
         <div id="aiResult" class="bg-white resume-paper rounded-xl p-8 whitespace-pre-wrap text-gray-800"></div>
-            <!-- Step 2: Job Matching -->
-    <div id="jobMatchSection" class="mt-6 hidden">
-      <button id="findJobsBtn"
-        class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg mb-4">
-        Find Matching Jobs
-      </button>
-      <div id="jobResults" class="space-y-4"></div>
-    </div>
-
+        <!-- Step 2: Job Matching -->
+        <div id="jobMatchSection" class="mt-6 hidden">
+          <button id="findJobsBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg mb-4">
+            Find Matching Jobs
+          </button>
+          <div id="jobResults" class="space-y-4"></div>
+        </div>
       </div>
-
-    <!-- Step 2: Job Matching Results -->
-    <div id="jobMatchSection" class="w-full lg:w-3/4 mx-auto hidden mt-8">
-      <h2 class="text-2xl font-bold text-gray-800 mb-4">Matching Jobs for You</h2>
-      <div id="jobResults" class="space-y-4"></div>
     </div>
   </div>
-    </div>
 
   <script>
-    // Dynamic field handlers (add/remove experience, education, skills)
-    // ... (retain your existing handlers here)
+    // (Re-use your existing dynamic field handlers here…)
 
-    const resumeForm = document.getElementById('resumeForm');
-    const previewSection = document.getElementById('previewSection');
-    const aiResult = document.getElementById('aiResult');
-    const generateBtn = document.getElementById('generateResume');
-    const jobSection = document.getElementById('jobMatchSection');
-    const jobResults = document.getElementById('jobResults');
+    const resumeForm       = document.getElementById('resumeForm');
+    const previewSection   = document.getElementById('previewSection');
+    const aiResult         = document.getElementById('aiResult');
+    const generateBtn      = document.getElementById('generateResume');
+    const jobMatchSection  = document.getElementById('jobMatchSection');
+    const findJobsBtn      = document.getElementById('findJobsBtn');
+    const jobResults       = document.getElementById('jobResults');
 
     function collectFormData() {
-      const [name, email, phone, location] = Array.from(resumeForm.querySelectorAll('input[placeholder]')).slice(0,4).map(i=>i.value.trim());
+      const [name, email, phone, location] = Array.from(
+        resumeForm.querySelectorAll('input[placeholder]')
+      ).slice(0,4).map(i => i.value.trim());
       const summary = resumeForm.querySelector('textarea').value.trim();
 
       const experiences = Array.from(resumeForm.querySelectorAll('.experience-entry')).map(e => ({
         title: e.querySelector('input[placeholder="Software Engineer"]').value.trim(),
         company: e.querySelector('input[placeholder="Tech Corp Inc."]').value.trim(),
         start: e.querySelector('input[type="month"]').value,
-        end: Array.from(e.querySelectorAll('input[type="month"]'))[1].value || 'Present',
+        end: (Array.from(e.querySelectorAll('input[type="month"]'))[1].value || 'Present'),
         location,
         responsibilities: e.querySelector('textarea').value.trim().split('\n').filter(l=>l)
       }));
@@ -197,30 +191,32 @@
         year: e.querySelector('input[placeholder="2020"]').value.trim()
       }));
 
-      const skills = Array.from(resumeForm.querySelectorAll('.skill-entry input')).map(i=>i.value.trim()).filter(s=>s);
+      const skills = Array.from(resumeForm.querySelectorAll('.skill-entry input'))
+        .map(i => i.value.trim()).filter(s => s);
 
       return { name, email, phone, location, summary, experiences, education, skills };
     }
 
+    // Step 1: Generate Resume
     generateBtn.addEventListener('click', async () => {
       generateBtn.disabled = true;
       generateBtn.textContent = 'Polishing…';
-      const payload = collectFormData();
+      aiResult.innerHTML = '';
+      jobMatchSection.classList.add('hidden');
+      jobResults.innerHTML = '';
 
       try {
-        // Generate resume
+        const payload = collectFormData();
         const res = await fetch('/api/generate', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {'Content-Type':'application/json'},
           body: JSON.stringify(payload)
         });
         const { result } = await res.json();
 
-        // Split reasoning and final
-        let reasoning = '';
-        let finalOutput = result;
-        const marker = 'However';
-        const idx = result.lastIndexOf(marker);
+        // Split reasoning/final
+        let reasoning = '', finalOutput = result;
+        const marker = 'However', idx = result.lastIndexOf(marker);
         if (idx !== -1) {
           reasoning = result.slice(0, idx).trim();
           finalOutput = result.slice(idx).trim();
@@ -228,94 +224,66 @@
 
         aiResult.innerHTML = `
           <details class="mb-4">
-            <summary class="cursor-pointer font-medium text-blue-600">Show AI Full Output / Reasoning</summary>
+            <summary class="cursor-pointer font-medium text-blue-600">
+              Show AI Full Output / Reasoning
+            </summary>
             <pre class="whitespace-pre-wrap mt-2 bg-gray-100 p-4 rounded">${reasoning||result}</pre>
           </details>
           <h2 class="text-2xl font-bold mb-2">Final Resume</h2>
           <pre class="whitespace-pre-wrap bg-white p-4 rounded resume-paper">${finalOutput}</pre>
         `;
         previewSection.classList.remove('hidden');
+        jobMatchSection.classList.remove('hidden');
 
-        // Fetch jobs
-        const jobRes = await fetch('/api/adzuna', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ skills: payload.skills, location: payload.location||'United States' })
-        });
-        const { jobs } = await jobRes.json();
-        jobResults.innerHTML = jobs.length>0
-          ? jobs.map(job=>`
-            <div class="job-card p-4 bg-white rounded-lg shadow-md transition-all">
-              <h3 class="text-xl font-bold text-blue-700">${job.title}</h3>
-              <p class="text-gray-600 mb-1"><i class="fas fa-building mr-1 text-blue-400"></i>${job.company}</p>
-              <p class="text-gray-600 mb-2"><i class="fas fa-map-marker-alt mr-1 text-blue-400"></i>${job.location}</p>
-              <p class="text-sm text-gray-700 mb-3">${job.description.slice(0,200)}...</p>
-              <a href="${job.url}" target="_blank" class="text-blue-600 font-medium hover:underline">View Job</a>
-            </div>`).join('')
-          : '<p class="text-gray-500">No matching jobs found.</p>';
-        jobSection.classList.remove('hidden');
       } catch(err) {
-        alert('Error: '+(err.message||'Failed to generate or match jobs'));
+        console.error(err);
+        alert('Error: ' + (err.message||'Failed to generate resume'));
       } finally {
-        generateBtn.disabled=false;
-        generateBtn.textContent='Generate Professional Resume';
+        generateBtn.disabled = false;
+        generateBtn.textContent = 'Generate Professional Resume';
       }
     });
 
-    // --- Step 2: Fetch and display jobs from Adzuna ---
-const findJobsBtn = document.getElementById('findJobsBtn');
-const jobMatchSection = document.getElementById('jobMatchSection');
-const jobResults = document.getElementById('jobResults');
+    // Step 2: Find Matching Jobs
+    findJobsBtn.addEventListener('click', async () => {
+      findJobsBtn.disabled = true;
+      findJobsBtn.textContent = 'Searching…';
+      jobResults.innerHTML = '';
 
-findJobsBtn.addEventListener('click', async () => {
-  findJobsBtn.disabled = true;
-  findJobsBtn.textContent = 'Searching…';
-  jobResults.innerHTML = '';
+      try {
+        const { skills, location } = collectFormData();
+        const res = await fetch('/api/adzuna', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ skills, location })
+        });
+        const { jobs } = await res.json();
 
-  // Pull skills + location from your collectFormData()
-  const { skills, location } = collectFormData();
-
-  try {
-    const res = await fetch('/api/adzuna', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ skills, location })
+        if (!jobs.length) {
+          jobResults.innerHTML = `<p class="text-gray-600">No matching jobs found.</p>`;
+        } else {
+          jobs.forEach(job => {
+            const card = document.createElement('div');
+            card.className = 'p-4 border rounded-lg hover:shadow-lg transition';
+            card.innerHTML = `
+              <h3 class="text-xl font-bold">${job.title}</h3>
+              <p class="text-gray-600">${job.company} • ${job.location}</p>
+              <p class="mt-2 text-gray-700">${job.description.slice(0,150)}…</p>
+              <a href="${job.url}" target="_blank" class="inline-block mt-3 text-blue-600 hover:underline">
+                View & Apply
+              </a>
+            `;
+            jobResults.appendChild(card);
+          });
+        }
+      } catch(err) {
+        console.error(err);
+        jobResults.innerHTML = `<p class="text-red-500">Error fetching jobs.</p>`;
+      } finally {
+        findJobsBtn.disabled = false;
+        findJobsBtn.textContent = 'Find Matching Jobs';
+      }
     });
-    const { jobs } = await res.json();
-
-    if (!jobs.length) {
-      jobResults.innerHTML = `<p class="text-gray-600">No matching jobs found.</p>`;
-    } else {
-      jobs.forEach(job => {
-        const card = document.createElement('div');
-        card.className = 'p-4 border rounded-lg hover:shadow-lg transition';
-        card.innerHTML = `
-          <h3 class="text-xl font-bold">${job.title}</h3>
-          <p class="text-gray-600">${job.company} • ${job.location}</p>
-          <p class="mt-2 text-gray-700">${job.description.slice(0, 150)}…</p>
-          <a href="${job.url}" target="_blank"
-            class="inline-block mt-3 text-blue-600 hover:underline">
-            View & Apply
-          </a>
-        `;
-        jobResults.appendChild(card);
-      });
-    }
-  } catch (err) {
-    jobResults.innerHTML = `<p class="text-red-500">Error fetching jobs.</p>`;
-    console.error(err);
-  } finally {
-    findJobsBtn.disabled = false;
-    findJobsBtn.textContent = 'Find Matching Jobs';
-  }
-});
-
-// Show the job‑match section once the resume is visible:
-generateBtn.addEventListener('click', () => {
-  // after your existing logic calls previewSection.classList.remove('hidden'):
-  jobMatchSection.classList.remove('hidden');
-});
-
   </script>
 </body>
 </html>
