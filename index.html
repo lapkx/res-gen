@@ -240,12 +240,19 @@
 
       try {
         const { skills, location } = collectFormData();
-        const res = await fetch('/api/adzuna', {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ skills, location })
-        });
-        const { jobs } = await res.json();
+const res = await fetch('/api/adzuna', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ skills, location })
+});
+
+if (!res.ok) {
+  const errorText = await res.text();
+  throw new Error(`Server returned ${res.status}: ${errorText}`);
+}
+
+const responseData = await res.json();
+const jobs = responseData?.jobs || [];
 
         if (!jobs.length) {
           jobResults.innerHTML = `<p class="text-gray-600">No matching jobs found.</p>`;
