@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { skills = [], location = '' } = req.body;
+    const { skills = [], location = '', keywords = '', jobType = '' } = req.body;
 
     // Use .env or fallback keys
     const app_id = process.env.ADZUNA_APP_ID || '56654c85';
@@ -20,8 +20,22 @@ export default async function handler(req, res) {
     const safeSkills = skills.length ? skills : ['developer'];
     const query = encodeURIComponent(safeSkills.join(' '));
     const where = encodeURIComponent(location || 'remote');
+    let url = `https://api.adzuna.com/v1/api/jobs/us/search/1?app_id=${app_id}&app_key=${app_key}&results_per_page=5&what=${query}&where=${where}&content-type=application/json`;
 
-    const url = `https://api.adzuna.com/v1/api/jobs/us/search/1?app_id=${app_id}&app_key=${app_key}&results_per_page=5&what=${query}&where=${where}&content-type=application/json`;
+    if (keywords) {
+      url += `&what_and=${encodeURIComponent(keywords)}`;
+    }
+
+    if (jobType) {
+      if (jobType === 'full_time') {
+        url += '&full_time=1';
+      } else if (jobType === 'part_time') {
+        url += '&part_time=1';
+      } else if (jobType === 'contract') {
+        url += '&contract=1';
+      }
+      // Add other job types as needed, e.g., permanent
+    }
 
     console.log('[Adzuna URL]', url); // Useful for debugging
 
