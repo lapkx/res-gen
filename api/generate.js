@@ -89,32 +89,22 @@ IMPORTANT: The output must start DIRECTLY with the ${name}'s header, without any
     let rawText = json.output.choices[0].text;
     let polished = '';
 
-    const finalAnswerMarker = "The final answer is:";
-    const markerIndex = rawText.toLowerCase().lastIndexOf(finalAnswerMarker.toLowerCase());
+    const finalAnswerRegex = /The final answer is(?:\s*(?:is|here|now|it's|it is|here is|here's))?\s*([\s\S]*)/i;
+    const match = rawText.match(finalAnswerRegex);
 
-    if (markerIndex !== -1) {
-      // If marker found, take text after it
-      polished = rawText.substring(markerIndex + finalAnswerMarker.length).trim();
+    if (match && match[1]) {
+      polished = match[1].trim();
     } else {
-      // Fallback 1: Try to get the last block starting with "# Resume"
-      const resumeBlocks = rawText.split(/\n# Resume/i); // Split by "\n# Resume" case-insensitively
+      const resumeBlocks = rawText.split(/\n# Resume/i);
       if (resumeBlocks.length > 1) {
-        // If split occurred, the last element contains content after the last "# Resume"
-        // Add back "# Resume" to this segment.
         polished = ("# Resume" + resumeBlocks[resumeBlocks.length - 1]).trim();
       } else {
-        // Fallback 2: If no clear marker or "# Resume" split, take the whole raw text.
-        // This is the safest option if other heuristics fail.
         polished = rawText.trim();
       }
     }
 
-    // Final trim, just in case something above left whitespace
     polished = polished.trim();
 
-    // If after all processing, polished is empty AND rawText was not (and not just whitespace),
-    // it might mean "The final answer is:" was the very last thing.
-    // In such an edge case, returning the rawText (trimmed) is better than empty.
     if (!polished && rawText.trim()) {
         polished = rawText.trim();
     }
