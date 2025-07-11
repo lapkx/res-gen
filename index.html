@@ -103,6 +103,25 @@
           </button>
         </div>
         <div id="jobMatchSection" class="mt-6 hidden">
+          <!-- Filters for Job Match -->
+          <div class="bg-gray-100 p-4 rounded-lg mb-4">
+            <h3 class="text-lg font-semibold text-gray-700 mb-3">Filter Jobs</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="keywordsFilter" class="block text-sm font-medium text-gray-700">Keywords</label>
+                <input type="text" id="keywordsFilter" placeholder="e.g., React, Node.js" class="mt-1 w-full px-3 py-2 border rounded-lg">
+              </div>
+              <div>
+                <label for="jobTypeFilter" class="block text-sm font-medium text-gray-700">Job Type</label>
+                <select id="jobTypeFilter" class="mt-1 w-full px-3 py-2 border rounded-lg">
+                  <option value="">All</option>
+                  <option value="full_time">Full-time</option>
+                  <option value="part_time">Part-time</option>
+                  <option value="contract">Contract</option>
+                </select>
+              </div>
+            </div>
+          </div>
           <button id="findJobsBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl mb-4">
             Find Matching Jobs
           </button>
@@ -113,7 +132,297 @@
   </div>
 
   <script>
-    // Existing logic preserved — auto-scroll, animation, and A4 PDF support included.
+    // Original "WORKING" script content will be pasted and adapted here.
+    // Placeholder for "Add/remove handlers" - these will be implemented based on "WORKING" HTML structure for entries.
+
+    const resumeForm      = document.getElementById('resumeForm');
+    const generateBtn     = document.getElementById('generateResume');
+    const previewSection  = document.getElementById('previewSection');
+    const aiResult        = document.getElementById('aiResult');
+    const jobMatchSection = document.getElementById('jobMatchSection');
+    const findJobsBtn     = document.getElementById('findJobsBtn');
+    const jobResults      = document.getElementById('jobResults');
+    const keywordsFilter  = document.getElementById('keywordsFilter');
+    const jobTypeFilter   = document.getElementById('jobTypeFilter');
+    const downloadPDFBtn  = document.getElementById('downloadPDF');
+
+    // Dynamic section containers
+    const experienceContainer = document.getElementById('experienceContainer');
+    const educationContainer  = document.getElementById('educationContainer');
+    const skillsContainer     = document.getElementById('skillsContainer');
+
+    // "Add" buttons
+    const addExperienceBtn = document.getElementById('addExperience');
+    const addEducationBtn  = document.getElementById('addEducation');
+    const addSkillBtn      = document.getElementById('addSkill');
+
+    // --- START OF LOGIC FROM "WORKING" FILE ---
+
+    // Add/Remove Handlers (to be adapted in the next step)
+    // For now, defining the functions based on "WORKING" file's structure,
+    // but they will need significant adaptation for the "NON-WORKING" UI.
+
+    function createExperienceEntry() {
+      const div = document.createElement('div');
+      div.className = 'experience-entry mb-4 p-4 border rounded-lg relative'; // Added relative for positioning remove button
+      div.innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+          <input type="text" placeholder="Job Title (e.g., Software Engineer)" class="w-full px-4 py-3 border rounded-xl" />
+          <input type="text" placeholder="Company (e.g., Tech Corp Inc.)" class="w-full px-4 py-3 border rounded-xl" />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+          <input type="month" class="w-full px-4 py-3 border rounded-xl" />
+          <input type="month" class="w-full px-4 py-3 border rounded-xl" />
+        </div>
+        <textarea rows="3" placeholder="Describe your responsibilities and achievements" class="w-full px-4 py-3 border rounded-xl"></textarea>
+        <button type="button" class="remove-entry mt-2 text-red-600 hover:text-red-800 flex items-center absolute top-2 right-2">
+          <i class="fas fa-times-circle text-xl"></i>
+        </button>
+      `;
+      div.querySelector('.remove-entry').addEventListener('click', () => div.remove());
+      return div;
+    }
+
+    function createEducationEntry() {
+      const div = document.createElement('div');
+      div.className = 'education-entry mb-4 p-4 border rounded-lg relative';
+      div.innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+          <input type="text" placeholder="Degree (e.g., Bachelor of Science)" class="w-full px-4 py-3 border rounded-xl" />
+          <input type="text" placeholder="Field of Study (e.g., Computer Science)" class="w-full px-4 py-3 border rounded-xl" />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+          <input type="text" placeholder="Institution (e.g., University of Technology)" class="w-full px-4 py-3 border rounded-xl" />
+          <input type="number" placeholder="Year of Graduation (e.g., 2020)" class="w-full px-4 py-3 border rounded-xl" />
+        </div>
+        <button type="button" class="remove-entry mt-2 text-red-600 hover:text-red-800 flex items-center absolute top-2 right-2">
+          <i class="fas fa-times-circle text-xl"></i>
+        </button>
+      `;
+      div.querySelector('.remove-entry').addEventListener('click', () => div.remove());
+      return div;
+    }
+
+    function createSkillEntry() {
+      const div = document.createElement('div');
+      div.className = 'skill-entry mb-4 p-4 border rounded-lg relative'; // Added p-4 and border for consistency
+      div.innerHTML = `
+        <div class="flex items-center mb-1">
+          <input type="text" placeholder="Skill (e.g., JavaScript)" class="flex-grow px-4 py-3 border rounded-xl mr-2" />
+          <select class="px-4 py-3 border rounded-xl bg-white">
+            <option>Beginner</option>
+            <option>Intermediate</option>
+            <option>Advanced</option>
+            <option>Expert</option>
+          </select>
+        </div>
+        <!-- Skill level bar can be added here if desired, similar to original working version -->
+        <!-- <div class="skill-level mt-1"><div class="skill-level-fill" style="width:75%"></div></div> -->
+        <button type="button" class="remove-entry mt-1 text-red-600 hover:text-red-800 flex items-center absolute top-2 right-2">
+           <i class="fas fa-times-circle text-xl"></i>
+        </button>
+      `;
+      div.querySelector('.remove-entry').addEventListener('click', () => div.remove());
+      // Add event listener for select to update skill bar if implemented
+      return div;
+    }
+
+    addExperienceBtn.addEventListener('click', () => {
+      experienceContainer.appendChild(createExperienceEntry());
+    });
+
+    addEducationBtn.addEventListener('click', () => {
+      educationContainer.appendChild(createEducationEntry());
+    });
+
+    addSkillBtn.addEventListener('click', () => {
+      skillsContainer.appendChild(createSkillEntry());
+    });
+
+    // Add one of each entry type by default for better UX
+    experienceContainer.appendChild(createExperienceEntry());
+    educationContainer.appendChild(createEducationEntry());
+    skillsContainer.appendChild(createSkillEntry());
+
+
+    function collectFormData() {
+      // Adapted to "NON-WORKING" HTML placeholders
+      const personalInfoInputs = resumeForm.querySelectorAll('#resumeForm > div:nth-child(1) input');
+      const name    = personalInfoInputs[0] ? personalInfoInputs[0].value.trim() : '';
+      const email   = personalInfoInputs[1] ? personalInfoInputs[1].value.trim() : '';
+      const phone   = personalInfoInputs[2] ? personalInfoInputs[2].value.trim() : '';
+      const location = personalInfoInputs[3] ? personalInfoInputs[3].value.trim() : '';
+      
+      const summary = resumeForm.querySelector('textarea[placeholder="Professional Summary"]').value.trim();
+
+      const experiences = Array.from(experienceContainer.querySelectorAll('.experience-entry')).map(e => {
+        const inputs = e.querySelectorAll('input');
+        const textarea = e.querySelector('textarea');
+        return {
+          title: inputs[0] ? inputs[0].value.trim() : '',
+          company: inputs[1] ? inputs[1].value.trim() : '',
+          start: inputs[2] ? inputs[2].value.trim() : '',
+          end: inputs[3] ? (inputs[3].value.trim() || 'Present') : 'Present',
+          // location field for experience was from original working, might not be needed if global location is used.
+          // For now, let's assume responsibilities are primary.
+          responsibilities: textarea ? textarea.value.trim().split('\n').filter(l => l) : []
+        };
+      });
+
+      const education = Array.from(educationContainer.querySelectorAll('.education-entry')).map(e => {
+        const inputs = e.querySelectorAll('input');
+        return {
+          degree: inputs[0] ? inputs[0].value.trim() : '',
+          field: inputs[1] ? inputs[1].value.trim() : '',
+          institution: inputs[2] ? inputs[2].value.trim() : '',
+          year: inputs[3] ? inputs[3].value.trim() : ''
+        };
+      });
+
+      const skills = Array.from(skillsContainer.querySelectorAll('.skill-entry')).map(e => {
+        const input = e.querySelector('input[type="text"]');
+        const select = e.querySelector('select');
+        return {
+          name: input ? input.value.trim() : '',
+          level: select ? select.value : ''
+        };
+      }).filter(s => s.name);
+
+      return { name, email, phone, location, summary, experiences, education, skills };
+    }
+
+    // STEP 1: Generate Resume
+    generateBtn.addEventListener('click', async () => {
+      generateBtn.disabled    = true;
+      generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Polishing…'; // Using innerHTML for icon
+      aiResult.innerHTML      = '';
+      jobMatchSection.classList.add('hidden');
+      jobResults.innerHTML    = '';
+
+      try {
+        const payload = collectFormData();
+        // console.log("Resume Payload:", JSON.stringify(payload, null, 2)); // For debugging
+        const res     = await fetch('/api/generate', { // Assuming API endpoint remains the same
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify(payload)
+        });
+        if (!res.ok) {
+            const errorData = await res.json().catch(() => ({ detail: res.statusText }));
+            throw new Error(`API Error ${res.status}: ${errorData.detail || 'Failed to generate resume'}`);
+        }
+        const data   = await res.json();
+        const result = data.result || data.polished; // Adapt based on actual API response
+
+        let reasoning   = '';
+        let finalOutput = result;
+        // The 'However' split logic might need adjustment based on actual AI output format
+        const idx       = result.lastIndexOf('However'); 
+        if (idx !== -1 && result.startsWith("I have reviewed")) { // More specific condition
+          reasoning   = result.slice(0, idx).trim();
+          finalOutput = result.slice(idx).trim();
+        }
+        
+        // Using template literals for cleaner HTML string construction
+        aiResult.innerHTML = `
+          <details class="mb-4">
+            <summary class="cursor-pointer font-medium text-blue-600 hover:underline">Show AI Full Output / Reasoning</summary>
+            <pre class="whitespace-pre-wrap mt-2 bg-gray-100 p-4 rounded-lg text-sm">
+${reasoning || result}
+            </pre>
+          </details>
+          <h2 class="text-2xl font-bold mb-3 mt-3">Final Resume Preview</h2>
+          <div id="resumeContentForPdf" class="whitespace-pre-wrap bg-white p-6 rounded-xl border border-gray-200">
+${finalOutput}
+          </div>
+        `;
+
+        previewSection.classList.remove('hidden');
+        jobMatchSection.classList.remove('hidden');
+        // No progress steps to update in this UI version
+        previewSection.scrollIntoView({ behavior: 'smooth' });
+      } catch (err) {
+        console.error('Generate error:', err);
+        aiResult.innerHTML = `<p class="text-red-500">Error: ${err.message || 'Failed to generate resume'}</p>`;
+      } finally {
+        generateBtn.disabled    = false;
+        generateBtn.textContent = 'Generate Resume';
+      }
+    });
+
+    // STEP 2: Find Matching Jobs
+    findJobsBtn.addEventListener('click', async () => {
+      findJobsBtn.disabled    = true;
+      findJobsBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Searching…';
+      jobResults.innerHTML    = '<div class="text-center py-4"><i class="fas fa-spinner fa-spin text-2xl text-blue-500"></i><p>Loading jobs...</p></div>';
+
+      try {
+        const { skills, location } = collectFormData(); // Skills now is an array of objects {name, level}
+        const keywords = keywordsFilter.value.trim();
+        const jobType  = jobTypeFilter.value;
+
+        const payload = { 
+          skills: skills.map(s => s.name), // Send only skill names to Adzuna API, as per original logic
+          location 
+        };
+        if (keywords) payload.keywords = keywords;
+        if (jobType)  payload.jobType  = jobType;
+        
+        // console.log("Adzuna Payload:", JSON.stringify(payload, null, 2)); // For debugging
+
+        const res = await fetch('/api/adzuna', { // Assuming API endpoint
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(`${res.status}: ${text}`);
+        }
+        const { jobs = [] } = await res.json();
+
+        if (!jobs.length) {
+          jobResults.innerHTML = `<p class="text-gray-600 text-center py-4">No matching jobs found. Try broadening your criteria.</p>`;
+        } else {
+          jobResults.innerHTML = jobs.map(job => `
+            <div class="p-5 border rounded-xl hover:shadow-lg transition job-card bg-white">
+              <h3 class="text-xl font-semibold text-blue-700">${job.title}</h3>
+              <p class="text-gray-600 text-sm mb-1">${job.company.display_name} • ${job.location.display_name}</p>
+              <p class="mt-2 text-gray-700 text-sm">${(job.description || 'No description available.').slice(0,180)}…</p>
+              <a href="${job.redirect_url || job.url}" target="_blank" class="inline-block mt-3 text-blue-600 hover:underline font-medium">
+                View & Apply <i class="fas fa-external-link-alt text-xs ml-1"></i>
+              </a>
+            </div>
+          `).join('');
+        }
+        // No progress steps to update
+      } catch (err) {
+        console.error('Adzuna error:', err);
+        jobResults.innerHTML = `<p class="text-red-500 text-center py-4">Error fetching jobs: ${err.message}</p>`;
+      } finally {
+        findJobsBtn.disabled    = false;
+        findJobsBtn.textContent = 'Find Matching Jobs';
+      }
+    });
+
+    // PDF Download Functionality (from "NON-WORKING" file's intent)
+    downloadPDFBtn.addEventListener('click', () => {
+      const resumeContent = document.getElementById('resumeContentForPdf'); // Target the specific content
+      if (resumeContent) {
+        const opt = {
+          margin:       [0.5, 0.5, 0.5, 0.5], // inches
+          filename:     'resume.pdf',
+          image:        { type: 'jpeg', quality: 0.98 },
+          html2canvas:  { scale: 2, useCORS: true, letterRendering: true }, // useCORS might be needed if images are external
+          jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        html2pdf().from(resumeContent).set(opt).save();
+      } else {
+        alert("Resume content not found for PDF generation.");
+      }
+    });
+
+    // --- END OF LOGIC FROM "WORKING" FILE ---
   </script>
 </body>
 </html>
