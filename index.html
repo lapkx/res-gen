@@ -1,156 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Resume Genius - Create & Match</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-<style>
-.resume-paper { background: linear-gradient(to bottom, #f9f9f9, #ffffff); box-shadow: 0 4px 30px rgba(0,0,0,0.1); border-top: 8px solid #3b82f6; }
-.progress-step.active { background-color: #3b82f6; color: white; }
-.job-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-.skill-level { height: 6px; border-radius: 3px; background-color: #e5e7eb; }
-.skill-level-fill { height: 100%; border-radius: 3px; background-color: #3b82f6; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resume Genius - Create & Match</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    .resume-paper { background: linear-gradient(to bottom, #f9f9f9, #ffffff); box-shadow: 0 4px 30px rgba(0,0,0,0.1); border-top: 8px solid #3b82f6; }
+    .progress-step.active { background-color: #3b82f6; color: white; }
+    .job-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+    .skill-level { height: 6px; border-radius: 3px; background-color: #e5e7eb; }
+    .skill-level-fill { height: 100%; border-radius: 3px; background-color: #3b82f6; }
+  </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
-<div class="container mx-auto px-4 py-8">
-<!-- Header -->
-<header class="text-center mb-10">
-<h1 class="text-4xl font-bold text-blue-600 mb-2">Resume Genius</h1>
-<p class="text-gray-600">Create a professional resume in minutes, then find jobs that match your profile</p>
-</header>
+  <div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <header class="text-center mb-10">
+      <h1 class="text-4xl font-bold text-blue-600 mb-2">Resume Genius</h1>
+      <p class="text-gray-600">Create a professional resume in minutes, then find jobs that match your profile</p>
+    </header>
 
-<!-- Progress Steps -->
-<div class="flex justify-center mb-12">
-<div class="flex items-center">
-        <div class="progress-step active w-10 h-10 rounded-full border-2 border-blue-500 text-blue-500 font-bold flex items-center justify-center">1</div>
+    <!-- Progress Steps -->
+    <div class="flex justify-center mb-12">
+      <div class="flex items-center">
         <div id="step1" class="progress-step active w-10 h-10 rounded-full border-2 border-blue-500 text-blue-500 font-bold flex items-center justify-center">1</div>
-<div class="w-16 h-1 bg-blue-500 mx-2"></div>
-        <div class="progress-step w-10 h-10 rounded-full border-2 border-gray-300 text-gray-400 font-bold flex items-center justify-center">2</div>
+        <div class="w-16 h-1 bg-blue-500 mx-2"></div>
         <div id="step2" class="progress-step w-10 h-10 rounded-full border-2 border-gray-300 text-gray-400 font-bold flex items-center justify-center">2</div>
-<div class="w-16 h-1 bg-gray-300 mx-2"></div>
-        <div class="progress-step w-10 h-10 rounded-full border-2 border-gray-300 text-gray-400 font-bold flex items-center justify-center">3</div>
+        <div class="w-16 h-1 bg-gray-300 mx-2"></div>
         <div id="step3" class="progress-step w-10 h-10 rounded-full border-2 border-gray-300 text-gray-400 font-bold flex items-center justify-center">3</div>
-</div>
-</div>
+      </div>
+    </div>
 
-<div class="flex flex-col lg:flex-row gap-8">
-      <!-- Form Section -->
+    <div class="flex flex-col lg:flex-row gap-8">
       <!-- Form Section (STEP 1) -->
-<div class="w-full lg:w-1/2 bg-white rounded-xl shadow-md p-6">
-<h2 class="text-2xl font-bold text-gray-800 mb-6">Your Information</h2>
-<form id="resumeForm" class="space-y-6">
-<!-- Personal Info -->
-<div>
-<h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
-<i class="fas fa-user-circle mr-2 text-blue-500"></i> Personal Details
-</h3>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-<input type="text" placeholder="John Doe" required class="w-full px-4 py-2 border rounded-lg" />
-<input type="email" placeholder="john@example.com" required class="w-full px-4 py-2 border rounded-lg" />
-<input type="tel" placeholder="(123) 456-7890" class="w-full px-4 py-2 border rounded-lg" />
-<input type="text" placeholder="City, Country" class="w-full px-4 py-2 border rounded-lg" />
-</div>
-</div>
+      <div class="w-full lg:w-1/2 bg-white rounded-xl shadow-md p-6">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">Your Information</h2>
+        <form id="resumeForm" class="space-y-6">
+          <!-- Personal Info -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+              <i class="fas fa-user-circle mr-2 text-blue-500"></i> Personal Details
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input type="text" placeholder="John Doe" required class="w-full px-4 py-2 border rounded-lg" />
+              <input type="email" placeholder="john@example.com" required class="w-full px-4 py-2 border rounded-lg" />
+              <input type="tel" placeholder="(123) 456-7890" class="w-full px-4 py-2 border rounded-lg" />
+              <input type="text" placeholder="City, Country" class="w-full px-4 py-2 border rounded-lg" />
+            </div>
+          </div>
 
-<!-- Professional Summary -->
-<div>
-<h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
-<i class="fas fa-file-alt mr-2 text-blue-500"></i> Professional Summary
-</h3>
-<textarea placeholder="Experienced professional with 5+ years in..." rows="4" class="w-full px-4 py-2 border rounded-lg"></textarea>
-</div>
+          <!-- Professional Summary -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+              <i class="fas fa-file-alt mr-2 text-blue-500"></i> Professional Summary
+            </h3>
+            <textarea placeholder="Experienced professional with 5+ years in..." rows="4" class="w-full px-4 py-2 border rounded-lg"></textarea>
+          </div>
 
-<!-- Work Experience -->
-<div>
-<h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
-<i class="fas fa-briefcase mr-2 text-blue-500"></i> Work Experience
-</h3>
-<div id="experienceContainer">
-<div class="experience-entry mb-4 p-4 border rounded-lg">
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-<input type="text" placeholder="Software Engineer" class="w-full px-4 py-2 border rounded-lg" />
-<input type="text" placeholder="Tech Corp Inc." class="w-full px-4 py-2 border rounded-lg" />
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-<input type="month" class="w-full px-4 py-2 border rounded-lg" />
-<input type="month" class="w-full px-4 py-2 border rounded-lg" />
-</div>
-<textarea rows="3" placeholder="Describe your responsibilities and achievements" class="w-full px-4 py-2 border rounded-lg"></textarea>
+          <!-- Work Experience -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+              <i class="fas fa-briefcase mr-2 text-blue-500"></i> Work Experience
+            </h3>
+            <div id="experienceContainer">
+              <div class="experience-entry mb-4 p-4 border rounded-lg">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                  <input type="text" placeholder="Software Engineer" class="w-full px-4 py-2 border rounded-lg" />
+                  <input type="text" placeholder="Tech Corp Inc." class="w-full px-4 py-2 border rounded-lg" />
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                  <input type="month" class="w-full px-4 py-2 border rounded-lg" />
+                  <input type="month" class="w-full px-4 py-2 border rounded-lg" />
+                </div>
+                <textarea rows="3" placeholder="Describe your responsibilities and achievements" class="w-full px-4 py-2 border rounded-lg"></textarea>
                 <button type="button" class="remove-experience mt-2 text-red-600 hover:text-red-800 flex items-center">
                   <i class="fas fa-minus-circle mr-1"></i> Remove Position
                 </button>
-</div>
-</div>
-<button type="button" id="addExperience" class="text-blue-600 flex items-center">
-<i class="fas fa-plus-circle mr-1"></i> Add Another Position
-</button>
-</div>
+              </div>
+            </div>
+            <button type="button" id="addExperience" class="text-blue-600 flex items-center">
+              <i class="fas fa-plus-circle mr-1"></i> Add Another Position
+            </button>
+          </div>
 
-<!-- Education -->
-<div>
-<h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
-<i class="fas fa-graduation-cap mr-2 text-blue-500"></i> Education
-</h3>
-<div id="educationContainer">
-<div class="education-entry mb-4 p-4 border rounded-lg">
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-<input type="text" placeholder="Bachelor of Science" class="w-full px-4 py-2 border rounded-lg" />
-<input type="text" placeholder="Computer Science" class="w-full px-4 py-2 border rounded-lg" />
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-<input type="text" placeholder="University of Technology" class="w-full px-4 py-2 border rounded-lg" />
-<input type="number" placeholder="2020" class="w-full px-4 py-2 border rounded-lg" />
-</div>
+          <!-- Education -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+              <i class="fas fa-graduation-cap mr-2 text-blue-500"></i> Education
+            </h3>
+            <div id="educationContainer">
+              <div class="education-entry mb-4 p-4 border rounded-lg">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                  <input type="text" placeholder="Bachelor of Science" class="w-full px-4 py-2 border rounded-lg" />
+                  <input type="text" placeholder="Computer Science" class="w-full px-4 py-2 border rounded-lg" />
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                  <input type="text" placeholder="University of Technology" class="w-full px-4 py-2 border rounded-lg" />
+                  <input type="number" placeholder="2020" class="w-full px-4 py-2 border rounded-lg" />
+                </div>
                 <button type="button" class="remove-education mt-2 text-red-600 hover:text-red-800 flex items-center">
                   <i class="fas fa-minus-circle mr-1"></i> Remove Education
                 </button>
-</div>
-</div>
-<button type="button" id="addEducation" class="text-blue-600 flex items-center">
-<i class="fas fa-plus-circle mr-1"></i> Add Another Education
-</button>
-</div>
+              </div>
+            </div>
+            <button type="button" id="addEducation" class="text-blue-600 flex items-center">
+              <i class="fas fa-plus-circle mr-1"></i> Add Another Education
+            </button>
+          </div>
 
-<!-- Skills -->
-<div>
-<h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
-<i class="fas fa-tools mr-2 text-blue-500"></i> Skills
-</h3>
-<div id="skillsContainer">
-<div class="skill-entry mb-4">
-<div class="flex items-center mb-1">
-<input type="text" placeholder="Skill (e.g., JavaScript)" class="flex-grow px-4 py-2 border rounded-lg mr-2" />
-<select class="px-4 py-2 border rounded-lg">
-<option>Beginner</option><option>Intermediate</option><option>Advanced</option><option>Expert</option>
-</select>
-</div>
-<div class="skill-level"><div class="skill-level-fill" style="width:75%"></div></div>
+          <!-- Skills -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+              <i class="fas fa-tools mr-2 text-blue-500"></i> Skills
+            </h3>
+            <div id="skillsContainer">
+              <div class="skill-entry mb-4">
+                <div class="flex items-center mb-1">
+                  <input type="text" placeholder="Skill (e.g., JavaScript)" class="flex-grow px-4 py-2 border rounded-lg mr-2" />
+                  <select class="px-4 py-2 border rounded-lg">
+                    <option>Beginner</option><option>Intermediate</option><option>Advanced</option><option>Expert</option>
+                  </select>
+                </div>
+                <div class="skill-level"><div class="skill-level-fill" style="width:75%"></div></div>
                 <button type="button" class="remove-skill mt-1 text-red-600 hover:text-red-800 flex items-center">
                   <i class="fas fa-minus-circle mr-1"></i> Remove Skill
                 </button>
-</div>
-</div>
-<button type="button" id="addSkill" class="text-blue-600 flex items-center">
-<i class="fas fa-plus-circle mr-1"></i> Add Another Skill
-</button>
-</div>
+              </div>
+            </div>
+            <button type="button" id="addSkill" class="text-blue-600 flex items-center">
+              <i class="fas fa-plus-circle mr-1"></i> Add Another Skill
+            </button>
+          </div>
 
           <!-- Generate -->
-<div class="pt-4">
-<button id="generateResume" type="button" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg">
-Generate Professional Resume
-</button>
-</div>
-</form>
-</div>
+          <div class="pt-4">
+            <button id="generateResume" type="button" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg">
+              Generate Professional Resume
+            </button>
+          </div>
+        </form>
+      </div>
 
-<!-- Resume Preview & Job Match Step 2 -->
-<div id="previewSection" class="w-full lg:w-1/2 hidden">
-<div id="aiResult" class="bg-white resume-paper rounded-xl p-8 whitespace-pre-wrap text-gray-800"></div>
-<div id="jobMatchSection" class="mt-6 hidden">
+      <!-- Resume Preview & Job Match Step 2 -->
+      <div id="previewSection" class="w-full lg:w-1/2 hidden">
+        <div id="aiResult" class="bg-white resume-paper rounded-xl p-8 whitespace-pre-wrap text-gray-800"></div>
+        <div id="jobMatchSection" class="mt-6 hidden">
           <!-- Filters -->
           <div class="bg-gray-100 p-4 rounded-lg mb-4">
             <h3 class="text-lg font-semibold text-gray-700 mb-3">Filter Jobs</h3>
@@ -170,133 +166,116 @@ Generate Professional Resume
               </div>
             </div>
           </div>
-<button id="findJobsBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg mb-4">
-Find Matching Jobs
-         	</button>
+          <button id="findJobsBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg mb-4">
+            Find Matching Jobs
           </button>
-<div id="jobResults" class="space-y-4"></div>
-</div>
-</div>
-</div>
-</div>
+          <div id="jobResults" class="space-y-4"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<script>
-    // Dynamic add/remove handlers (retain your existing logic)
+  <script>
     // Add/remove handlers must go here (reuse your existing code)...
 
-const resumeForm      = document.getElementById('resumeForm');
-const generateBtn     = document.getElementById('generateResume');
-const previewSection  = document.getElementById('previewSection');
-const aiResult        = document.getElementById('aiResult');
-const jobMatchSection = document.getElementById('jobMatchSection');
-const findJobsBtn     = document.getElementById('findJobsBtn');
-const jobResults      = document.getElementById('jobResults');
+    const resumeForm      = document.getElementById('resumeForm');
+    const generateBtn     = document.getElementById('generateResume');
+    const previewSection  = document.getElementById('previewSection');
+    const aiResult        = document.getElementById('aiResult');
+    const jobMatchSection = document.getElementById('jobMatchSection');
+    const findJobsBtn     = document.getElementById('findJobsBtn');
+    const jobResults      = document.getElementById('jobResults');
     const keywordsFilter  = document.getElementById('keywordsFilter');
     const jobTypeFilter   = document.getElementById('jobTypeFilter');
 
-function collectFormData() {
-const [name, email, phone, location] = Array.from(
-resumeForm.querySelectorAll('input[placeholder]')
-).slice(0,4).map(i => i.value.trim());
-const summary = resumeForm.querySelector('textarea').value.trim();
+    function collectFormData() {
+      const [name, email, phone, location] = Array.from(
+        resumeForm.querySelectorAll('input[placeholder]')
+      ).slice(0,4).map(i => i.value.trim());
+      const summary = resumeForm.querySelector('textarea').value.trim();
 
-const experiences = Array.from(resumeForm.querySelectorAll('.experience-entry')).map(e => ({
-title: e.querySelector('input[placeholder="Software Engineer"]').value.trim(),
-company: e.querySelector('input[placeholder="Tech Corp Inc."]').value.trim(),
-start: e.querySelector('input[type="month"]').value,
-end: (Array.from(e.querySelectorAll('input[type="month"]'))[1].value || 'Present'),
-location,
-responsibilities: e.querySelector('textarea').value.trim().split('\n').filter(l=>l)
-}));
+      const experiences = Array.from(resumeForm.querySelectorAll('.experience-entry')).map(e => ({
+        title: e.querySelector('input[placeholder="Software Engineer"]').value.trim(),
+        company: e.querySelector('input[placeholder="Tech Corp Inc."]').value.trim(),
+        start: e.querySelector('input[type="month"]').value,
+        end: (Array.from(e.querySelectorAll('input[type="month"]'))[1].value || 'Present'),
+        location,
+        responsibilities: e.querySelector('textarea').value.trim().split('\n').filter(l=>l)
+      }));
 
-const education = Array.from(resumeForm.querySelectorAll('.education-entry')).map(e => ({
-degree: e.querySelector('input[placeholder="Bachelor of Science"]').value.trim(),
-field: e.querySelector('input[placeholder="Computer Science"]').value.trim(),
-institution: e.querySelector('input[placeholder="University of Technology"]').value.trim(),
-year: e.querySelector('input[placeholder="2020"]').value.trim()
-}));
+      const education = Array.from(resumeForm.querySelectorAll('.education-entry')).map(e => ({
+        degree: e.querySelector('input[placeholder="Bachelor of Science"]').value.trim(),
+        field: e.querySelector('input[placeholder="Computer Science"]').value.trim(),
+        institution: e.querySelector('input[placeholder="University of Technology"]').value.trim(),
+        year: e.querySelector('input[placeholder="2020"]').value.trim()
+      }));
 
-const skills = Array.from(resumeForm.querySelectorAll('.skill-entry input'))
-.map(i => i.value.trim()).filter(s => s);
+      const skills = Array.from(resumeForm.querySelectorAll('.skill-entry input'))
+        .map(i => i.value.trim()).filter(s => s);
 
-return { name, email, phone, location, summary, experiences, education, skills };
-}
+      return { name, email, phone, location, summary, experiences, education, skills };
+    }
 
-    // Step 1: Generate Resume
     // STEP 1: Generate Resume
-generateBtn.addEventListener('click', async () => {
-generateBtn.disabled    = true;
-generateBtn.textContent = 'Polishing…';
-aiResult.innerHTML      = '';
-jobMatchSection.classList.add('hidden');
-jobResults.innerHTML    = '';
+    generateBtn.addEventListener('click', async () => {
+      generateBtn.disabled    = true;
+      generateBtn.textContent = 'Polishing…';
+      aiResult.innerHTML      = '';
+      jobMatchSection.classList.add('hidden');
+      jobResults.innerHTML    = '';
 
-try {
-const payload = collectFormData();
-const res     = await fetch('/api/generate', {
-method:'POST',
-headers:{'Content-Type':'application/json'},
-body:JSON.stringify(payload)
-});
-        const data = await res.json();
+      try {
+        const payload = collectFormData();
+        const res     = await fetch('/api/generate', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify(payload)
+        });
         const data   = await res.json();
-const result = data.result || data.polished;
+        const result = data.result || data.polished;
 
-        // Split reasoning vs final
-        let reasoning = '';
         let reasoning   = '';
-let finalOutput = result;
-        const idx = result.lastIndexOf('However');
+        let finalOutput = result;
         const idx       = result.lastIndexOf('However');
-if (idx !== -1) {
-          reasoning = result.slice(0, idx).trim();
+        if (idx !== -1) {
           reasoning   = result.slice(0, idx).trim();
-finalOutput = result.slice(idx).trim();
-}
+          finalOutput = result.slice(idx).trim();
+        }
 
-        aiResult.innerHTML = 
         aiResult.innerHTML = `
-         <details class="mb-4">
-           <summary class="cursor-pointer font-medium text-blue-600">Show AI Full Output / Reasoning</summary>
-            <pre class="whitespace-pre-wrap mt-2 bg-gray-100 p-4 rounded">${reasoning||result}</pre>
+          <details class="mb-4">
+            <summary class="cursor-pointer font-medium text-blue-600">Show AI Full Output / Reasoning</summary>
             <pre class="whitespace-pre-wrap mt-2 bg-gray-100 p-4 rounded">
 ${reasoning || result}
             </pre>
-         </details>
-         <h2 class="text-2xl font-bold mb-2">Final Resume</h2>
-          <pre class="whitespace-pre-wrap bg-white p-4 rounded resume-paper">${finalOutput}</pre>
-        ;
+          </details>
+          <h2 class="text-2xl font-bold mb-2">Final Resume</h2>
           <pre class="whitespace-pre-wrap bg-white p-4 rounded resume-paper">
 ${finalOutput}
           </pre>
         `;
 
-previewSection.classList.remove('hidden');
-jobMatchSection.classList.remove('hidden');
-
-      } catch(err) {
-        console.error('Generate error:', err); alert('Error: ' + (err.message||'Failed')); }
-      finally {
+        previewSection.classList.remove('hidden');
+        jobMatchSection.classList.remove('hidden');
         document.getElementById('step1').classList.remove('active');
         document.getElementById('step2').classList.add('active');
       } catch (err) {
         console.error('Generate error:', err);
         alert('Error: ' + (err.message || 'Failed to generate resume'));
       } finally {
-generateBtn.disabled    = false;
-generateBtn.textContent = 'Generate Professional Resume';
-}
-});
+        generateBtn.disabled    = false;
+        generateBtn.textContent = 'Generate Professional Resume';
+      }
+    });
 
-    // Step 2: Find Matching Jobs
     // STEP 2: Find Matching Jobs
-findJobsBtn.addEventListener('click', async () => {
-findJobsBtn.disabled    = true;
-findJobsBtn.textContent = 'Searching…';
-jobResults.innerHTML    = '';
+    findJobsBtn.addEventListener('click', async () => {
+      findJobsBtn.disabled    = true;
+      findJobsBtn.textContent = 'Searching…';
+      jobResults.innerHTML    = '';
 
-try {
-const { skills, location } = collectFormData();
+      try {
+        const { skills, location } = collectFormData();
         const keywords = keywordsFilter.value.trim();
         const jobType  = jobTypeFilter.value;
 
@@ -304,56 +283,40 @@ const { skills, location } = collectFormData();
         if (keywords) payload.keywords = keywords;
         if (jobType)  payload.jobType  = jobType;
 
-const res = await fetch('/api/adzuna', {
-method: 'POST',
-headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ skills, location })
+        const res = await fetch('/api/adzuna', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
-});
-if (!res.ok) {
-const text = await res.text();
-          throw new Error(${res.status}: ${text});
+        });
+        if (!res.ok) {
+          const text = await res.text();
           throw new Error(`${res.status}: ${text}`);
-}
-        const responseData = await res.json();
-        const jobs = responseData.jobs || [];
+        }
         const { jobs = [] } = await res.json();
 
-if (!jobs.length) {
-          jobResults.innerHTML = <p class="text-gray-600">No matching jobs found.</p>;
+        if (!jobs.length) {
           jobResults.innerHTML = `<p class="text-gray-600">No matching jobs found.</p>`;
-} else {
-          jobs.forEach(job => {
-            const card = document.createElement('div');
-            card.className = 'p-4 border rounded-lg hover:shadow-lg transition';
-            card.innerHTML = 
+        } else {
           jobResults.innerHTML = jobs.map(job => `
             <div class="p-4 border rounded-lg hover:shadow-lg transition">
-             <h3 class="text-xl font-bold">${job.title}</h3>
-             <p class="text-gray-600">${job.company} • ${job.location}</p>
-             <p class="mt-2 text-gray-700">${job.description.slice(0,150)}…</p>
-              <a href="${job.url}" target="_blank" class="inline-block mt-3 text-blue-600 hover:underline">View & Apply</a>
-            ;
-            jobResults.appendChild(card);
-          });
+              <h3 class="text-xl font-bold">${job.title}</h3>
+              <p class="text-gray-600">${job.company} • ${job.location}</p>
+              <p class="mt-2 text-gray-700">${job.description.slice(0,150)}…</p>
               <a href="${job.url}" target="_blank" class="inline-block mt-3 text-blue-600 hover:underline">View &amp; Apply</a>
             </div>
           `).join('');
-}
-      } catch(err) {
-        console.error('Adzuna error:',err);
-        jobResults.innerHTML = <p class="text-red-500">Error fetching jobs: ${err.message||err}</p>;
+        }
 
         document.getElementById('step2').classList.remove('active');
         document.getElementById('step3').classList.add('active');
       } catch (err) {
         console.error('Adzuna error:', err);
         jobResults.innerHTML = `<p class="text-red-500">Error fetching jobs: ${err.message}</p>`;
-} finally {
-findJobsBtn.disabled    = false;
-findJobsBtn.textContent = 'Find Matching Jobs';
-}
-});
-</script>
+      } finally {
+        findJobsBtn.disabled    = false;
+        findJobsBtn.textContent = 'Find Matching Jobs';
+      }
+    });
+  </script>
 </body>
 </html>
