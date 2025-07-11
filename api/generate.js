@@ -4,19 +4,17 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // destructure everything your single HTML form will send
   const {
     name,
     email,
     phone,
     location,
     summary,
-    experiences, // expect an array of { title, company, start, end, location, responsibilities }
-    education,   // expect an array of { degree, field, institution, year }
-    skills       // expect an array of strings
+    experiences,
+    education,
+    skills
   } = req.body;
 
-  // basic validation
   if (!name || !summary || !Array.isArray(experiences) || experiences.length === 0) {
     return res.status(400).json({ error: 'Missing required resume data' });
   }
@@ -26,7 +24,6 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'API key not set' });
   }
 
-  // build a single prompt
   const prompt = `
 You are a world‐class resume writer. Using only the information below, output a clean, ATS‐friendly resume with these sections:
 • Header (Name, Email, Phone, Location)
@@ -64,6 +61,7 @@ SKILLS:
 ${skills.join(', ')}
 
 Output only the resume text — no explanations.
+IMPORTANT: The output must start DIRECTLY with the ${name}'s header, without any introductory phrases, preamble, or conversational text.
 `;
 
   try {
@@ -88,9 +86,41 @@ Output only the resume text — no explanations.
       return res.status(500).json({ error: 'AI API error' });
     }
 
-    // send back as `result` so your front end can stay the same
-    const polished = json.output.choices[0].text.trim();
+    let rawText = json.output.choices[0].text;
+    let polished = '';
+
+    const finalAnswerMarker = "The final answer is:";
+    const markerIndex = rawText.toLowerCase().lastIndexOf(finalAnswerMarker.toLowerCase());
+
+    if (markerIndex !== -1) {
+      // If marker found, take text after it
+      polished = rawText.substring(markerIndex + finalAnswerMarker.length).trim();
+    } else {
+      // Fallback 1: Try to get the last block starting with "# Resume"
+      const resumeBlocks = rawText.split(/\n# Resume/i); // Split by "\n# Resume" case-insensitively
+      if (resumeBlocks.length > 1) {
+        // If split occurred, the last element contains content after the last "# Resume"
+        // Add back "# Resume" to this segment.
+        polished = ("# Resume" + resumeBlocks[resumeBlocks.length - 1]).trim();
+      } else {
+        // Fallback 2: If no clear marker or "# Resume" split, take the whole raw text.
+        // This is the safest option if other heuristics fail.
+        polished = rawText.trim();
+      }
+    }
+
+    // Final trim, just in case something above left whitespace
+    polished = polished.trim();
+
+    // If after all processing, polished is empty AND rawText was not (and not just whitespace),
+    // it might mean "The final answer is:" was the very last thing.
+    // In such an edge case, returning the rawText (trimmed) is better than empty.
+    if (!polished && rawText.trim()) {
+        polished = rawText.trim();
+    }
+
     res.status(200).json({ result: polished });
+
   } catch (err) {
     console.error('Fetch error:', err);
     res.status(500).json({ error: err.message || 'Server error' });
